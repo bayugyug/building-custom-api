@@ -91,6 +91,7 @@
 		
 	[x] Sanity check
 	    
+		ginkgo -v ./controllers/...
 		
 	
 	[x] Run from the console
@@ -99,9 +100,6 @@
 		./rest-building --config '{"port":"8989","showlog":true}'
 
 ```
-	[x] Check the log history from the redis-cache
-	
-
 
 
 ### Notes
