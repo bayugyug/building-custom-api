@@ -1,6 +1,9 @@
 ## rest-building
 
+
+
 * [x] Sample golang rest api that simulates CRUD with in-memory-storage
+
 
 
 ### Pre-Requisite
@@ -29,9 +32,7 @@
      git pull && make clean && make
 
 ```
-
-### Required Preparation
-
+ 
 
 
 ### List of End-Points-Url
@@ -91,12 +92,13 @@
 		
 	[x] Sanity check
 	    
-		ginkgo -v ./controllers/...
-		
-	
+		ginkgo ./..		
+			
 	[x] Run from the console
 
+
 ```sh
+
 		./rest-building --config '{"port":"8989","showlog":true}'
 
 ```
