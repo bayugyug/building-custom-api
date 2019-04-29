@@ -3,6 +3,7 @@ package utils
 import (
 	"crypto/md5"
 	"fmt"
+	"math/rand"
 	"time"
 
 	"github.com/google/uuid"
@@ -80,4 +81,14 @@ func (h Helper) SeedDataEmptyName() string {
 		fake.DigitsN(5),
 		fake.DigitsN(5),
 	)
+}
+
+// SeedDataFloors generate random floor list
+func (h Helper) SeedDataFloors() []string {
+	var floors []string
+	t := rand.Intn(50)
+	for i := 1; i <= t; i++ {
+		floors = append(floors, fmt.Sprintf("floor-%s", fake.DigitsN(15)))
+	}
+	return floors
 }

@@ -39,6 +39,12 @@ func (q *Storage) Add(name, address string, floors []string) (string, error) {
 	q.Lock.Lock()
 	defer q.Lock.Unlock()
 
+	// check
+	if len(name) == 0 {
+		//give it back ;-)
+		return "", errors.New("record name empty")
+	}
+
 	// check if already in store
 	storekey := q.StoreHash(name)
 	row, oks := q.Store[storekey]
@@ -69,6 +75,12 @@ func (q *Storage) Update(storekey, name, address string, floors []string) error 
 	// ensure
 	q.Lock.Lock()
 	defer q.Lock.Unlock()
+
+	// check
+	if len(storekey) == 0 || len(name) == 0 {
+		//give it back ;-)
+		return errors.New("record name/id empty")
+	}
 
 	// check if id is a match
 	if storekey != q.StoreHash(name) {
