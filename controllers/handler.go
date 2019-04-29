@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/bayugyug/rest-building/models"
-	"github.com/bayugyug/rest-building/utils"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 )
@@ -46,7 +45,6 @@ func (resp *APIHandler) BuildCreate(w http.ResponseWriter, r *http.Request) {
 
 	//sanity check
 	if err := render.Bind(r, data); err != nil {
-		utils.Dumper("BIND_FAILED", err.Error(), data)
 		//206
 		resp.ReplyErrContent(w, r, http.StatusPartialContent, http.StatusText(http.StatusPartialContent))
 		return
@@ -73,7 +71,6 @@ func (resp *APIHandler) BuildingUpdate(w http.ResponseWriter, r *http.Request) {
 
 	//sanity check
 	if err := render.Bind(r, data); err != nil {
-		utils.Dumper("BIND_FAILED", err)
 		//206
 		resp.ReplyErrContent(w, r, http.StatusPartialContent, http.StatusText(http.StatusPartialContent))
 		return

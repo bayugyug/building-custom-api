@@ -72,3 +72,12 @@ func (h Helper) SeedData() string {
 		fake.DigitsN(5),
 	)
 }
+
+// SeedDataEmpty empty column
+func (h Helper) SeedDataEmptyName() string {
+	return fmt.Sprintf(`{ "name": "","address": "address::%s","floors": ["floor-%s","floor-%s"] }`,
+		fake.DigitsN(5),
+		fake.DigitsN(5),
+		fake.DigitsN(5),
+	)
+}
