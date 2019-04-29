@@ -16,13 +16,6 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-/*
-Expect(response["prodfs"][0]).To(Equal("completed"))
-Expect(len(response["prds"])).Should(BeNumerically(">", 0))
-Expect(len(response["safus"])).Should(BeNumerically(">", 0))
-Expect(len(response["saf"])).Should(BeNumerically(">", 0))
-Expect(len(response["stofus"])).Should(BeNumerically(">", 0))
-*/
 var _ = Describe("REST Building API Service", func() {
 
 	//init
