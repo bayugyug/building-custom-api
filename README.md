@@ -92,7 +92,7 @@
 		
 	[x] Sanity check
 	    
-		ginkgo ./..		
+		ginkgo ./...	
 			
 	[x] Run from the console
 
