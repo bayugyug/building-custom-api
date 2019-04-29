@@ -28,14 +28,11 @@ var _ = Describe("REST Building API Service", func() {
 	//init
 	var formdata string
 	var router *chi.Mux
-
-	//init service
 	controllers.APIInstance, _ = controllers.NewAPIService(
 		controllers.WithSvcOptAddress(":8989"),
 	)
 
 	BeforeEach(func() {
-
 		router = chi.NewRouter()
 		router.Post("/v1/api/building", controllers.APIInstance.API.BuildCreate)
 		router.Put("/v1/api/building", controllers.APIInstance.API.BuildingUpdate)
@@ -67,6 +64,8 @@ var _ = Describe("REST Building API Service", func() {
 
 			Expect(w.Code).To(Equal(http.StatusOK))
 			Expect(response.Code).To(Equal(http.StatusOK))
+
+			By("Create data ok")
 		})
 	})
 
@@ -126,6 +125,8 @@ var _ = Describe("REST Building API Service", func() {
 			}
 			Expect(w.Code).To(Equal(http.StatusOK))
 			Expect(response2.Code).To(Equal(http.StatusOK))
+
+			By("Update data ok")
 		})
 	})
 
@@ -182,6 +183,7 @@ var _ = Describe("REST Building API Service", func() {
 			Expect(w.Code).To(Equal(http.StatusOK))
 			Expect(response2.Code).To(Equal(http.StatusOK))
 
+			By("Get more data ok")
 		})
 	})
 
@@ -234,6 +236,8 @@ var _ = Describe("REST Building API Service", func() {
 			}
 			Expect(w.Code).To(Equal(http.StatusOK))
 			Expect(response2.Code).To(Equal(http.StatusOK))
+
+			By("Get 1 data ok")
 		})
 	})
 
@@ -286,6 +290,7 @@ var _ = Describe("REST Building API Service", func() {
 			}
 			Expect(w.Code).To(Equal(http.StatusOK))
 			Expect(response2.Code).To(Equal(http.StatusOK))
+			By("Remove data ok")
 		})
 	})
 
