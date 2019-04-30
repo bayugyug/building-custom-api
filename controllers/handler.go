@@ -173,6 +173,7 @@ func (resp *APIHandler) BuildingDelete(w http.ResponseWriter, r *http.Request) {
 
 // ReplyErrContent send err-code/err-msg
 func (resp *APIHandler) ReplyErrContent(w http.ResponseWriter, r *http.Request, code int, msg string) {
+	render.Status(r, code)
 	render.JSON(w, r, APIResponse{
 		Code:   code,
 		Status: msg,

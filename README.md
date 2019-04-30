@@ -86,9 +86,11 @@
 		- port      = port to run the http server (default: 8989)
 		- showlog   = flag for dev't log on std-out
 		
-	[x] Sanity check
+	[x] Sanity check either of the 2 choices below
 	    
-		ginkgo ./...	
+		a. ginkgo ./...	
+		b. make test
+		
 			
 	[x] Run from the console
 

@@ -15,6 +15,7 @@ test : build
 	go tool vet -v . > vet.txt
 	gocov test github.com/bayugyug/building-custom-api | gocov-xml > coverage.xml
 	go test ./... -bench=. -test.benchmem -v 2>/dev/null | gobench2plot > benchmarks.xml
+	ginkgo -v  ./...
 
 testginkgo : build
 	ginkgo -v  ./...

@@ -25,14 +25,14 @@ func NewBuildingUpdate() *BuildingUpdateParams {
 func (params *BuildingUpdateParams) Bind(r *http.Request) error {
 	//sanity check
 	if params == nil {
-		return ErrMissinRequiredParameters
+		return ErrMissingRequiredParameters
 	}
 	//check
 	params.ID = strings.TrimSpace(params.ID)
 	params.Name = strings.TrimSpace(params.Name)
 	params.Address = strings.TrimSpace(params.Address)
 	if !params.SanityCheck() {
-		return ErrMissinRequiredParameters
+		return ErrMissingRequiredParameters
 	}
 	// just a post-process after a decode..
 	return nil
@@ -51,7 +51,7 @@ func (params *BuildingUpdateParams) SanityCheck() bool {
 func (params *BuildingUpdateParams) Update(ctx context.Context, store *driver.Storage) error {
 	//check
 	if !params.SanityCheck() {
-		return ErrMissinRequiredParameters
+		return ErrMissingRequiredParameters
 	}
 	if oks := store.Exists(params.ID); !oks {
 		return ErrRecordNotFound

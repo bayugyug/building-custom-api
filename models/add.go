@@ -11,8 +11,8 @@ import (
 )
 
 var (
-	// ErrMissinRequiredParameters reqd params missing
-	ErrMissinRequiredParameters = errors.New("missing required parameter")
+	// ErrMissingRequiredParameters reqd params missing
+	ErrMissingRequiredParameters = errors.New("missing required parameter")
 	// ErrorNotFound record not found
 	ErrorNotFound = errors.New("record not found")
 	// ErrRecordsNotFound list is empty
@@ -38,14 +38,14 @@ func NewBuildingCreate() *BuildingCreateParams {
 func (params *BuildingCreateParams) Bind(r *http.Request) error {
 	//sanity check
 	if params == nil {
-		return ErrMissinRequiredParameters
+		return ErrMissingRequiredParameters
 	}
 	params.Name = strings.TrimSpace(params.Name)
 	params.Address = strings.TrimSpace(params.Address)
 
 	//check
 	if !params.SanityCheck() {
-		return ErrMissinRequiredParameters
+		return ErrMissingRequiredParameters
 	}
 
 	// just a post-process after a decode..
@@ -65,7 +65,7 @@ func (params *BuildingCreateParams) SanityCheck() bool {
 func (params *BuildingCreateParams) Create(ctx context.Context, store *driver.Storage) (string, error) {
 	//check
 	if !params.SanityCheck() {
-		return "", ErrMissinRequiredParameters
+		return "", ErrMissingRequiredParameters
 	}
 
 	record := driver.NewBuildingData()

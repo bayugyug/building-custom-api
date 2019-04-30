@@ -222,5 +222,14 @@ var _ = Describe("REST Building API Service", func() {
 			})
 		})
 
+		Context("Get a record", func() {
+			It("should error", func() {
+				uparams := &models.BuildingGetOneParams{ID: "not-exists-id"}
+				row, err := uparams.Get(ctx, store)
+				Expect(err).To(HaveOccurred())
+				Expect(row).To(BeZero())
+				By("Get a data empty as expected")
+			})
+		})
 	}) // invalid
 })

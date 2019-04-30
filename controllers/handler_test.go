@@ -192,7 +192,7 @@ var _ = Describe("REST Building API Service", func() {
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
 				}
-				Expect(w.Code).To(Equal(http.StatusOK))
+				Expect(w.Code).To(Equal(http.StatusPartialContent))
 				Expect(response.Code).To(Equal(http.StatusPartialContent))
 				By("Create data not done")
 			})
@@ -207,7 +207,7 @@ var _ = Describe("REST Building API Service", func() {
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
 				}
-				Expect(w.Code).To(Equal(http.StatusOK))
+				Expect(w.Code).To(Equal(http.StatusPartialContent))
 				Expect(response.Code).To(Equal(http.StatusPartialContent))
 				By("Update data not done")
 			})
@@ -220,7 +220,7 @@ var _ = Describe("REST Building API Service", func() {
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
 				}
-				Expect(w.Code).To(Equal(http.StatusOK))
+				Expect(w.Code).To(Equal(http.StatusNotFound))
 				Expect(response.Code).To(Equal(http.StatusNotFound))
 				By("Get data not found")
 			})
