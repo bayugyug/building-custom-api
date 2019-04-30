@@ -2,10 +2,12 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"time"
 
 	"github.com/bayugyug/building-custom-api/config"
@@ -167,7 +169,15 @@ func (svc *APIService) MapRoute() *chi.Mux {
 				return sr
 			}(svc.API))
 	})
-
+	//show
+	walkFunc := func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
+		route = strings.Replace(route, "/*/", "/", -1)
+		fmt.Printf("... %s %s\n", method, route)
+		return nil
+	}
+	if err := chi.Walk(router, walkFunc); err != nil {
+		fmt.Printf("Logging err: %s\n", err.Error())
+	}
 	return router
 }
 
