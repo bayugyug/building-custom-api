@@ -3,7 +3,7 @@ package models
 import (
 	"context"
 
-	"github.com/bayugyug/rest-building/driver"
+	"github.com/bayugyug/building-custom-api/driver"
 )
 
 // BuildingGetOneParams delete params

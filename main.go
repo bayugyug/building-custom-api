@@ -5,8 +5,8 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/bayugyug/rest-building/config"
-	"github.com/bayugyug/rest-building/controllers"
+	"github.com/bayugyug/building-custom-api/config"
+	"github.com/bayugyug/building-custom-api/controllers"
 )
 
 const (

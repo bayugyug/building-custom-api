@@ -8,8 +8,8 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/bayugyug/rest-building/config"
-	"github.com/bayugyug/rest-building/driver"
+	"github.com/bayugyug/building-custom-api/config"
+	"github.com/bayugyug/building-custom-api/driver"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -31,8 +31,6 @@ type APIService struct {
 	API     *APIHandler
 	Router  *chi.Mux
 	Address string
-	Context context.Context
-	Storage *driver.Storage
 }
 
 // WithSvcOptHandler opts for handler
@@ -56,8 +54,10 @@ func NewAPIService(opts ...*config.Option) (*APIService, error) {
 	//default
 	svc := &APIService{
 		Address: ":8989",
-		API:     &APIHandler{},
-		Context: context.Background(),
+		API: &APIHandler{
+			Storage: driver.NewStorage(),
+			Context: context.Background(),
+		},
 	}
 
 	//add options if any
@@ -73,8 +73,6 @@ func NewAPIService(opts ...*config.Option) (*APIService, error) {
 
 	//set the actual router
 	svc.Router = svc.MapRoute()
-	//in-memory
-	svc.Storage = driver.NewStorage()
 
 	//good :-)
 	return svc, nil

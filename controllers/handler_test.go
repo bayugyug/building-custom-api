@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/bayugyug/rest-building/controllers"
-	"github.com/bayugyug/rest-building/utils"
+	"github.com/bayugyug/building-custom-api/controllers"
+	"github.com/bayugyug/building-custom-api/utils"
 	"github.com/go-chi/chi"
 	"github.com/icrowley/fake"
 	. "github.com/onsi/ginkgo"

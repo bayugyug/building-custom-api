@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/bayugyug/rest-building/driver"
-	"github.com/bayugyug/rest-building/models"
-	"github.com/bayugyug/rest-building/utils"
+	"github.com/bayugyug/building-custom-api/driver"
+	"github.com/bayugyug/building-custom-api/models"
+	"github.com/bayugyug/building-custom-api/utils"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

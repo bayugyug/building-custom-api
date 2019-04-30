@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/bayugyug/rest-building/driver"
+	"github.com/bayugyug/building-custom-api/driver"
 )
 
 // BuildingCreateParams create params

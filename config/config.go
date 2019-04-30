@@ -4,9 +4,8 @@ import (
 	"encoding/json"
 	"flag"
 	"log"
-	"os"
 
-	"github.com/bayugyug/rest-building/utils"
+	"github.com/bayugyug/building-custom-api/utils"
 )
 
 const (
@@ -29,7 +28,7 @@ type ParameterConfig struct {
 type APISettings struct {
 	Config    *ParameterConfig
 	CmdParams string
-	EnvVars   map[string]*string
+	Address   string
 }
 
 // Setup options settings
@@ -42,6 +41,13 @@ func WithSetupConfig(r *ParameterConfig) Setup {
 	}
 }
 
+// WithSvcOptAddress for the json params
+func WithSvcOptAddress(r string) Setup {
+	return func(args *APISettings) {
+		args.Address = r
+	}
+}
+
 // WithSetupCmdParams for the json params
 func WithSetupCmdParams(r string) Setup {
 	return func(args *APISettings) {
@@ -49,23 +55,11 @@ func WithSetupCmdParams(r string) Setup {
 	}
 }
 
-// WithSetupEnvVars for envt params
-func WithSetupEnvVars(r map[string]*string) Setup {
-	return func(args *APISettings) {
-		args.EnvVars = r
-	}
-}
-
 // NewAppSettings main entry for config
 func NewAppSettings(setters ...Setup) *APISettings {
 	//set default
-	cfg := &APISettings{
-		EnvVars: make(map[string]*string),
-	}
-	//maybe export from envt
-	cfg.EnvVars = map[string]*string{
-		"API_CONFIG": &cfg.CmdParams,
-	}
+	cfg := &APISettings{}
+
 	//chk the passed params
 	for _, setter := range setters {
 		setter(cfg)
@@ -88,12 +82,6 @@ func (g *APISettings) InitRecov() {
 
 //InitEnvParams enable all OS envt vars to reload internally
 func (g *APISettings) InitEnvParams() {
-	//just in-case, over-write from ENV
-	for k, v := range g.EnvVars {
-		if os.Getenv(k) != "" {
-			*v = os.Getenv(k)
-		}
-	}
 	//get options
 	flag.StringVar(&g.CmdParams, "config", g.CmdParams, usageConfig)
 	flag.Parse()

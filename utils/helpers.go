@@ -13,8 +13,6 @@ import (
 type Helper struct {
 }
 
-var UHelper Helper
-
 //RemoveIntDuplicates de-duplicate int list
 func (h Helper) RemoveIntDuplicates(elements []int) []int {
 	encountered := map[int]bool{}

@@ -1,7 +1,7 @@
 BUILD_DATE := $(shell date +%Y-%m-%dT%H:%M:%S%z)
 BUILD_TIME := $(shell date +%Y%m%d.%H%M%S)
 BUILD_HASH := $(shell git log -1 2>/dev/null| head -n 1 | cut -d ' ' -f 2)
-BUILD_NAME := rest-building
+BUILD_NAME := building-custom-api
 
 all: build
 
@@ -13,11 +13,11 @@ test : build
 	go test ./... > testrun.txt
 	golint > lint.txt
 	go tool vet -v . > vet.txt
-	gocov test github.com/bayugyug/rest-building | gocov-xml > coverage.xml
+	gocov test github.com/bayugyug/building-custom-api | gocov-xml > coverage.xml
 	go test ./... -bench=. -test.benchmem -v 2>/dev/null | gobench2plot > benchmarks.xml
 
 testginkgo : build
-	ginkgo -v ./controllers/...
+	ginkgo -v  ./...
 
 testrun : clean test
 	time go test -v -bench=. -benchmem -dummy >> testrun.txt 2>&1

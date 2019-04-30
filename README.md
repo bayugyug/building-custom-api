@@ -1,4 +1,4 @@
-## rest-building
+## building-custom-api
 
 
 
@@ -11,13 +11,13 @@
 	- Please run this in your command line to ensure packages are in-place.
 	  (normally these will be handled when compiling the api binary)
 	
-		go get -u -v github.com/go-chi/chi
-		go get -u -v github.com/go-chi/chi/middleware
-		go get -u -v github.com/go-chi/cors
-		go get -u -v github.com/go-chi/render
-		go get -u -v github.com/onsi/ginkgo/ginkgo
-		go get -u -v github.com/onsi/gomega/... 
-		go get -u -v github.com/icrowley/fake
+		go get -v github.com/go-chi/chi
+		go get -v github.com/go-chi/chi/middleware
+		go get -v github.com/go-chi/cors
+		go get -v github.com/go-chi/render
+		go get -v github.com/onsi/ginkgo/ginkgo
+		go get -v github.com/onsi/gomega/... 
+		go get -v github.com/icrowley/fake
 ```sh
 
 
@@ -27,7 +27,7 @@
 
 ```sh
 
-     git clone https://github.com/bayugyug/rest-building.git && cd rest-building
+     git clone https://github.com/bayugyug/building-custom-api.git && cd building-custom-api
 
      git pull && make clean && make
 
@@ -99,7 +99,7 @@
 
 ```sh
 
-		./rest-building --config '{"port":"8989","showlog":true}'
+		./building-custom-api --config '{"port":"8989","showlog":true}'
 
 ```
 

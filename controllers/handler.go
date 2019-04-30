@@ -1,10 +1,12 @@
 package controllers
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
-	"github.com/bayugyug/rest-building/models"
+	"github.com/bayugyug/building-custom-api/driver"
+	"github.com/bayugyug/building-custom-api/models"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 )
@@ -27,6 +29,8 @@ type APIResponse struct {
 
 // APIHandler the api handler
 type APIHandler struct {
+	Context context.Context
+	Storage *driver.Storage
 }
 
 // Welcome index page
@@ -49,7 +53,7 @@ func (resp *APIHandler) BuildCreate(w http.ResponseWriter, r *http.Request) {
 		resp.ReplyErrContent(w, r, http.StatusPartialContent, http.StatusText(http.StatusPartialContent))
 		return
 	}
-	pid, err := data.Create(APIInstance.Context, APIInstance.Storage)
+	pid, err := data.Create(resp.Context, resp.Storage)
 	//chk
 	if err != nil {
 		//400
@@ -77,7 +81,7 @@ func (resp *APIHandler) BuildingUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//chk
-	if err := data.Update(APIInstance.Context, APIInstance.Storage); err != nil {
+	if err := data.Update(resp.Context, resp.Storage); err != nil {
 		//400
 		resp.ReplyErrContent(w, r, http.StatusBadRequest, err.Error())
 		return
@@ -95,7 +99,7 @@ func (resp *APIHandler) BuildingGet(w http.ResponseWriter, r *http.Request) {
 	data := &models.BuildingGetOneParams{}
 
 	//check
-	rows, err := data.GetAll(APIInstance.Context, APIInstance.Storage)
+	rows, err := data.GetAll(resp.Context, resp.Storage)
 
 	//chk
 	if err != nil {
@@ -124,7 +128,7 @@ func (resp *APIHandler) BuildingGetOne(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//check
-	row, err := data.Get(APIInstance.Context, APIInstance.Storage)
+	row, err := data.Get(resp.Context, resp.Storage)
 
 	//chk
 	if err != nil {
@@ -147,14 +151,14 @@ func (resp *APIHandler) BuildingDelete(w http.ResponseWriter, r *http.Request) {
 	data := models.NewBuildingDelete(strings.TrimSpace(chi.URLParam(r, "id")))
 
 	//chk
-	if len(data.ID) == 0 {
+	if data.ID == "" {
 		//206
 		resp.ReplyErrContent(w, r, http.StatusPartialContent, http.StatusText(http.StatusPartialContent))
 		return
 	}
 
 	//chk
-	if err := data.Remove(APIInstance.Context, APIInstance.Storage); err != nil {
+	if err := data.Remove(resp.Context, resp.Storage); err != nil {
 		//400
 		resp.ReplyErrContent(w, r, http.StatusBadRequest, err.Error())
 		return
