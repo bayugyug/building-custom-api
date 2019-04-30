@@ -18,7 +18,6 @@ type BuildingUpdateParams struct {
 // NewBuildingUpdate new creator
 func NewBuildingUpdate() *BuildingUpdateParams {
 	return &BuildingUpdateParams{}
-
 }
 
 // Bind filter params
