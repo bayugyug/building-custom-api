@@ -34,7 +34,6 @@ func NewStorage() *Storage {
 
 // Add new row
 func (q *Storage) Add(name, address string, floors []string) (string, error) {
-
 	// ensure
 	q.Lock.Lock()
 	defer q.Lock.Unlock()
@@ -71,7 +70,6 @@ func (q *Storage) Add(name, address string, floors []string) (string, error) {
 
 // Update an old record
 func (q *Storage) Update(storekey, name, address string, floors []string) error {
-
 	// ensure
 	q.Lock.Lock()
 	defer q.Lock.Unlock()
@@ -97,15 +95,12 @@ func (q *Storage) Update(storekey, name, address string, floors []string) error 
 		q.Store[storekey] = row
 		return nil
 	}
-
 	//give it back ;-)
 	return errors.New("record not found")
-
 }
 
 // Delete an old record
 func (q *Storage) Delete(storekey string) error {
-
 	// ensure
 	q.Lock.Lock()
 	defer q.Lock.Unlock()
@@ -115,10 +110,8 @@ func (q *Storage) Delete(storekey string) error {
 		delete(q.Store, storekey)
 		return nil
 	}
-
 	//give it back ;-)
 	return errors.New("record not found")
-
 }
 
 // GetOne 1 record
@@ -131,10 +124,8 @@ func (q *Storage) GetOne(storekey string) (*BuildingData, error) {
 	if !oks {
 		return nil, errors.New("record not found")
 	}
-
 	//give it back ;-)
 	return data, nil
-
 }
 
 // GetAll all the records
@@ -154,7 +145,6 @@ func (q *Storage) GetAll() ([]*BuildingData, error) {
 	}
 	//give it back ;-)
 	return all, nil
-
 }
 
 // Len check total len

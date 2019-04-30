@@ -18,10 +18,7 @@
 		go get -v github.com/onsi/ginkgo/ginkgo
 		go get -v github.com/onsi/gomega/... 
 		go get -v github.com/icrowley/fake
-```sh
 
-
-```
 
 ### Compile
 
@@ -86,8 +83,7 @@
 	
 	[x] Fields:
 	
-		- port = port to run the http server (default: 8989)
-	
+		- port      = port to run the http server (default: 8989)
 		- showlog   = flag for dev't log on std-out
 		
 	[x] Sanity check
@@ -96,10 +92,9 @@
 			
 	[x] Run from the console
 
-
 ```sh
 
-		./building-custom-api --config '{"port":"8989","showlog":true}'
+	./building-custom-api --config '{"port":"8989","showlog":true}'
 
 ```
 

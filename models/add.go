@@ -31,10 +31,10 @@ func (params *BuildingCreateParams) Bind(r *http.Request) error {
 	//check
 	params.Name = strings.TrimSpace(params.Name)
 	params.Address = strings.TrimSpace(params.Address)
-	if params.Name == "" || params.Address == "" || len(params.Floors) == 0 {
+	if params.Name == "" || params.Address == "" ||
+		len(params.Floors) == 0 {
 		return errors.New("missing required parameter")
 	}
-
 	// just a post-process after a decode..
 	return nil
 }

@@ -27,9 +27,9 @@ func (params *BuildingGetOneParams) Get(ctx context.Context, store *driver.Stora
 
 // GetAll query from the store base on id
 func (params *BuildingGetOneParams) GetAll(ctx context.Context, store *driver.Storage) ([]*driver.BuildingData, error) {
-	if data, err := store.GetAll(); err != nil {
+	data, err := store.GetAll()
+	if err != nil {
 		return nil, err
-	} else {
-		return data, nil
 	}
+	return data, nil
 }

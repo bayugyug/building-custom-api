@@ -27,14 +27,14 @@ func (params *BuildingUpdateParams) Bind(r *http.Request) error {
 	if params == nil {
 		return errors.New("missing required parameter")
 	}
-	//check id
+	//check
 	params.ID = strings.TrimSpace(params.ID)
 	params.Name = strings.TrimSpace(params.Name)
 	params.Address = strings.TrimSpace(params.Address)
-	if params.Name == "" || params.Address == "" || len(params.Floors) == 0 || params.ID == "" {
+	if params.Name == "" || params.Address == "" ||
+		len(params.Floors) == 0 || params.ID == "" {
 		return errors.New("missing required parameter")
 	}
-
 	// just a post-process after a decode..
 	return nil
 }
