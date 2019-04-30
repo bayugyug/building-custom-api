@@ -22,7 +22,15 @@ func (params *BuildingGetOneParams) Get(ctx context.Context, store *driver.Stora
 	if err != nil {
 		return nil, err
 	}
-	return data, nil
+
+	var rec *driver.BuildingData
+	var valid bool
+
+	if rec, valid = data.(*driver.BuildingData); valid {
+		return rec, nil
+	}
+	//not found
+	return nil, ErrRecordsNotFound
 }
 
 // GetAll query from the store base on id
@@ -31,5 +39,18 @@ func (params *BuildingGetOneParams) GetAll(ctx context.Context, store *driver.St
 	if err != nil {
 		return nil, err
 	}
-	return data, nil
+
+	var all []*driver.BuildingData
+
+	//empty
+	if len(data) <= 0 {
+		return all, ErrRecordsNotFound
+	}
+
+	for _, vv := range data {
+		if row, valid := vv.(*driver.BuildingData); valid {
+			all = append(all, row)
+		}
+	}
+	return all, nil
 }

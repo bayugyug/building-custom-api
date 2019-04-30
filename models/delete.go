@@ -14,7 +14,6 @@ type BuildingDeleteParams struct {
 // NewBuildingDelete data remover
 func NewBuildingDelete(pid string) *BuildingDeleteParams {
 	return &BuildingDeleteParams{ID: pid}
-
 }
 
 // Remove delete a row from the store base on id

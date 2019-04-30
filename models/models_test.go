@@ -178,6 +178,7 @@ var _ = Describe("REST Building API Service", func() {
 					Address: "Marina Boulevard",
 					Floors:  utils.Helper{}.SeedDataFloors(),
 				}
+
 				pid, err := params.Create(ctx, store)
 				if err != nil {
 					Fail(err.Error())

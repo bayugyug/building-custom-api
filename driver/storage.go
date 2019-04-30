@@ -1,102 +1,43 @@
 package driver
 
 import (
-	"crypto/md5"
 	"errors"
-	"fmt"
 	"sync"
-	"time"
+)
+
+var (
+	// ErrEmptyParameter some required params empty
+	ErrEmptyParameter = errors.New("record name/id empty")
+	// ErrRecordNotFound not exists
+	ErrRecordNotFound = errors.New("record not found")
 )
 
 // Storage in-memory map
 type Storage struct {
-	Store map[string]*BuildingData
+	Store map[string]interface{}
 	Lock  *sync.Mutex
-}
-
-// BuildingData data row in the storage
-type BuildingData struct {
-	ID       string   `json:"id"`
-	Name     string   `json:"name"`
-	Address  string   `json:"address"`
-	Floors   []string `json:"floors"`
-	Created  string   `json:"created,omitempty"`
-	Modified string   `json:"modified,omitempty"`
 }
 
 // NewStorage new storage object
 func NewStorage() *Storage {
 	return &Storage{
-		Store: make(map[string]*BuildingData),
+		Store: make(map[string]interface{}),
 		Lock:  new(sync.Mutex),
 	}
 }
 
-// Add new row
-func (q *Storage) Add(name, address string, floors []string) (string, error) {
+// Set new row
+func (q *Storage) Set(storekey string, data interface{}) (string, error) {
 	// ensure
 	q.Lock.Lock()
 	defer q.Lock.Unlock()
-
 	// check
-	if len(name) == 0 {
-		//give it back ;-)
-		return "", errors.New("record name empty")
+	if len(storekey) == 0 {
+		return "", ErrEmptyParameter
 	}
-
 	// check if already in store
-	storekey := q.StoreHash(name)
-	row, oks := q.Store[storekey]
-	if oks {
-		//update
-		row.Address = address
-		row.Floors = floors
-		row.Modified = time.Now().Format(time.RFC3339)
-	} else {
-		//new
-		row = &BuildingData{
-			ID:      storekey,
-			Name:    name,
-			Address: address,
-			Floors:  floors,
-			Created: time.Now().Format(time.RFC3339),
-		}
-	}
-	//save it back
-	q.Store[storekey] = row
-	//give it back ;-)
+	q.Store[storekey] = data
 	return storekey, nil
-}
-
-// Update an old record
-func (q *Storage) Update(storekey, name, address string, floors []string) error {
-	// ensure
-	q.Lock.Lock()
-	defer q.Lock.Unlock()
-
-	// check
-	if len(storekey) == 0 || len(name) == 0 {
-		//give it back ;-)
-		return errors.New("record name/id empty")
-	}
-
-	// check if id is a match
-	if storekey != q.StoreHash(name) {
-		//give it back ;-)
-		return errors.New("record id mismatch ")
-	}
-
-	if row, oks := q.Store[storekey]; oks {
-		//update
-		row.Address = address
-		row.Floors = floors
-		row.Modified = time.Now().Format(time.RFC3339)
-		//save it back
-		q.Store[storekey] = row
-		return nil
-	}
-	//give it back ;-)
-	return errors.New("record not found")
 }
 
 // Delete an old record
@@ -111,40 +52,45 @@ func (q *Storage) Delete(storekey string) error {
 		return nil
 	}
 	//give it back ;-)
-	return errors.New("record not found")
+	return ErrRecordNotFound
 }
 
 // GetOne 1 record
-func (q *Storage) GetOne(storekey string) (*BuildingData, error) {
+func (q *Storage) GetOne(storekey string) (interface{}, error) {
 	// ensure
 	q.Lock.Lock()
 	defer q.Lock.Unlock()
 
 	data, oks := q.Store[storekey]
 	if !oks {
-		return nil, errors.New("record not found")
+		return nil, ErrRecordNotFound
 	}
 	//give it back ;-)
 	return data, nil
 }
 
 // GetAll all the records
-func (q *Storage) GetAll() ([]*BuildingData, error) {
+func (q *Storage) GetAll() ([]interface{}, error) {
 	// ensure
 	q.Lock.Lock()
 	defer q.Lock.Unlock()
 
-	var all []*BuildingData
+	var all []interface{}
 	for _, row := range q.Store {
 		all = append(all, row)
 	}
-
-	//empty
-	if len(all) <= 0 {
-		return all, errors.New("record not found")
-	}
 	//give it back ;-)
 	return all, nil
+}
+
+// Exists check the record
+func (q *Storage) Exists(storekey string) bool {
+	// ensure
+	q.Lock.Lock()
+	defer q.Lock.Unlock()
+	_, oks := q.Store[storekey]
+	//give it back ;-)
+	return oks
 }
 
 // Len check total len
@@ -154,9 +100,4 @@ func (q *Storage) Len() int {
 	defer q.Lock.Unlock()
 	//give it back ;-)
 	return len(q.Store)
-}
-
-// StoreHash check if the name is in the storage
-func (q *Storage) StoreHash(s string) string {
-	return fmt.Sprintf("%x", md5.Sum([]byte(s)))
 }

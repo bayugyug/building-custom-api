@@ -2,9 +2,9 @@ package models
 
 import (
 	"context"
-	"errors"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/bayugyug/building-custom-api/driver"
 )
@@ -25,21 +25,45 @@ func NewBuildingUpdate() *BuildingUpdateParams {
 func (params *BuildingUpdateParams) Bind(r *http.Request) error {
 	//sanity check
 	if params == nil {
-		return errors.New("missing required parameter")
+		return ErrMissinRequiredParameters
 	}
 	//check
 	params.ID = strings.TrimSpace(params.ID)
 	params.Name = strings.TrimSpace(params.Name)
 	params.Address = strings.TrimSpace(params.Address)
-	if params.Name == "" || params.Address == "" ||
-		len(params.Floors) == 0 || params.ID == "" {
-		return errors.New("missing required parameter")
+	if !params.SanityCheck() {
+		return ErrMissinRequiredParameters
 	}
 	// just a post-process after a decode..
 	return nil
 }
 
+// SanityCheck filter required params
+func (params *BuildingUpdateParams) SanityCheck() bool {
+	if params.Name == "" || params.Address == "" ||
+		len(params.Floors) == 0 || params.ID == "" {
+		return false
+	}
+	return true
+}
+
 // Update a row from the store
 func (params *BuildingUpdateParams) Update(ctx context.Context, store *driver.Storage) error {
-	return store.Update(params.ID, params.Name, params.Address, params.Floors)
+	//check
+	if !params.SanityCheck() {
+		return ErrMissinRequiredParameters
+	}
+	if oks := store.Exists(params.ID); !oks {
+		return ErrRecordNotFound
+	}
+	//set row
+	record := &driver.BuildingData{
+		ID:       params.ID,
+		Name:     params.Name,
+		Address:  params.Address,
+		Floors:   params.Floors,
+		Modified: time.Now().Format(time.RFC3339),
+	}
+	_, err := store.Set(record.ID, record)
+	return err
 }

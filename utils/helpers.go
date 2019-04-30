@@ -84,7 +84,7 @@ func (h Helper) SeedDataEmptyName() string {
 // SeedDataFloors generate random floor list
 func (h Helper) SeedDataFloors() []string {
 	var floors []string
-	t := rand.Intn(50)
+	t := rand.Intn(10) + 1
 	for i := 1; i <= t; i++ {
 		floors = append(floors, fmt.Sprintf("floor-%s", fake.DigitsN(15)))
 	}

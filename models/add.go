@@ -5,8 +5,20 @@ import (
 	"errors"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/bayugyug/building-custom-api/driver"
+)
+
+var (
+	// ErrMissinRequiredParameters reqd params missing
+	ErrMissinRequiredParameters = errors.New("missing required parameter")
+	// ErrorNotFound record not found
+	ErrorNotFound = errors.New("record not found")
+	// ErrRecordsNotFound list is empty
+	ErrRecordsNotFound = errors.New("record(s) not found")
+	// ErrRecordNotFound data not exiss
+	ErrRecordNotFound = errors.New("record not found")
 )
 
 // BuildingCreateParams create params
@@ -26,20 +38,48 @@ func NewBuildingCreate() *BuildingCreateParams {
 func (params *BuildingCreateParams) Bind(r *http.Request) error {
 	//sanity check
 	if params == nil {
-		return errors.New("missing required parameter")
+		return ErrMissinRequiredParameters
 	}
-	//check
 	params.Name = strings.TrimSpace(params.Name)
 	params.Address = strings.TrimSpace(params.Address)
-	if params.Name == "" || params.Address == "" ||
-		len(params.Floors) == 0 {
-		return errors.New("missing required parameter")
+
+	//check
+	if !params.SanityCheck() {
+		return ErrMissinRequiredParameters
 	}
+
 	// just a post-process after a decode..
 	return nil
 }
 
+// SanityCheck filter required params
+func (params *BuildingCreateParams) SanityCheck() bool {
+	if params.Name == "" || params.Address == "" ||
+		len(params.Floors) == 0 {
+		return false
+	}
+	return true
+}
+
 // Create add a row from the store
 func (params *BuildingCreateParams) Create(ctx context.Context, store *driver.Storage) (string, error) {
-	return store.Add(params.Name, params.Address, params.Floors)
+	//check
+	if !params.SanityCheck() {
+		return "", ErrMissinRequiredParameters
+	}
+
+	record := driver.NewBuildingData()
+	pid := record.StoreKey(params.Name)
+
+	if oks := store.Exists(pid); oks {
+		record.Modified = time.Now().Format(time.RFC3339)
+	} else {
+		record.Created = time.Now().Format(time.RFC3339)
+	}
+	//set row
+	record.ID = pid
+	record.Name = params.Name
+	record.Address = params.Address
+	record.Floors = params.Floors
+	return store.Set(pid, record)
 }
