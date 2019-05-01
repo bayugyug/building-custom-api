@@ -65,16 +65,14 @@ func (p *BuildingUpdateParams) Update(ctx context.Context, store *drivers.Storag
 	//convert db data
 	vrow, ok := row.(*BuildingData)
 	if !ok {
-		return ErrRecordNotFound
+		return ErrDBTransaction
 	}
-	//set row
+	//set old row with new value
 	record = vrow
-	record.Name = *p.Name
 	record.Address = p.Address
 	record.Floors = p.Floors
 	record.Modified = time.Now().Format(time.RFC3339)
-	gid := store.Set(pid, record)
-	if gid == "" {
+	if gid := store.Set(pid, record); gid == "" {
 		return ErrDBTransaction
 	}
 	return nil
