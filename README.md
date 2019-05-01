@@ -6,7 +6,7 @@
 
 
 
-### Pre-Requisite / Development dependencies
+### Dependencies
 - Dependencies manager: Dep - https://github.com/golang/dep
 - Testing framework: ginkgo - https://github.com/onsi/ginkgo
 
@@ -22,7 +22,7 @@
  
 
 
-### List of End-Points-Url
+### End-Points-Url
 
 
 ```go
@@ -74,11 +74,11 @@
 		- port      = port to run the http server (default: 8989)
 
 - Sanity check
-	- Either:
+	- Either
 		- ginkgo ./...	
 		- make test
 
-- Run from the console
+- From console
 
 ```sh
 
