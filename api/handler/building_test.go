@@ -49,6 +49,7 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusCreated))
+				Expect(response.Status).To(Equal("success"))
 				By("Create data ok")
 			})
 		})
@@ -64,6 +65,7 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusCreated))
+				Expect(response.Status).To(Equal("success"))
 				By("Add before update data ok")
 				//update it
 				pid, _ := response.Result.(string)
@@ -75,6 +77,7 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w2.Code).To(Equal(http.StatusOK))
+				Expect(response.Status).To(Equal("success"))
 				By("Update data ok")
 			})
 		})
@@ -92,6 +95,7 @@ var _ = Describe("REST Building API Service", func() {
 						Fail(err.Error())
 					}
 					Expect(w.Code).To(Equal(http.StatusCreated))
+					Expect(response.Status).To(Equal("success"))
 					By("Add 1x1 data ok")
 				}
 
@@ -102,6 +106,8 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w2.Code).To(Equal(http.StatusOK))
+				Expect(response2.Status).To(Equal("success"))
+				Expect(response2.Total).Should(BeNumerically(">", 0))
 				By("Get more data ok")
 			})
 		})
@@ -116,6 +122,7 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusCreated))
+				Expect(response.Status).To(Equal("success"))
 				By("Add record before get 1 data ok")
 
 				pid, _ := response.Result.(string)
@@ -125,6 +132,7 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w2.Code).To(Equal(http.StatusOK))
+				Expect(response2.Status).To(Equal("success"))
 				By("Get 1 data ok")
 			})
 		})
@@ -139,6 +147,7 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusCreated))
+				Expect(response.Status).To(Equal("success"))
 				By("Add before remove data ok")
 
 				pid, _ := response.Result.(string)
@@ -148,6 +157,7 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w2.Code).To(Equal(http.StatusOK))
+				Expect(response2.Status).To(Equal("success"))
 				By("Remove data ok")
 			})
 		})
@@ -162,6 +172,7 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusCreated))
+				Expect(response.Status).To(Equal("success"))
 				By("Create data ok")
 			})
 		})

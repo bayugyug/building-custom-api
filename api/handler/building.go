@@ -71,7 +71,7 @@ func (b *Building) BuildCreate(w http.ResponseWriter, r *http.Request) {
 	//good
 	render.Status(r, http.StatusCreated)
 	render.JSON(w, r, Response{
-		Status: "Success",
+		Status: "success",
 		Result: pid,
 	})
 }
@@ -105,7 +105,7 @@ func (b *Building) BuildingUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 	//good
 	render.JSON(w, r, Response{
-		Status: "Success",
+		Status: "success",
 	})
 }
 
@@ -122,7 +122,7 @@ func (b *Building) BuildingGet(w http.ResponseWriter, r *http.Request) {
 	}
 	//good
 	render.JSON(w, r, Response{
-		Status: "Success",
+		Status: "success",
 		Result: rows,
 		Total:  len(rows),
 	})
@@ -147,7 +147,7 @@ func (b *Building) BuildingGetOne(w http.ResponseWriter, r *http.Request) {
 	}
 	//good
 	render.JSON(w, r, Response{
-		Status: "Success",
+		Status: "success",
 		Result: row,
 	})
 }
@@ -175,7 +175,7 @@ func (b *Building) BuildingDelete(w http.ResponseWriter, r *http.Request) {
 	}
 	//good
 	render.JSON(w, r, Response{
-		Status: "Success",
+		Status: "success",
 	})
 }
 
