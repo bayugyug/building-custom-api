@@ -253,8 +253,8 @@ var _ = Describe("REST Building API Service", func() {
 				if err := json.Unmarshal(body2, &response2); err != nil {
 					Fail(err.Error())
 				}
-				Expect(w2.Code).To(Equal(http.StatusNoContent))
-				Expect(response2.Code).To(Equal(http.StatusNoContent))
+				Expect(w2.Code).To(Equal(http.StatusNotFound))
+				Expect(response2.Code).To(Equal(http.StatusNotFound))
 				By("Update data did not continue")
 			})
 		})

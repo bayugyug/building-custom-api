@@ -74,6 +74,9 @@ func (p *BuildingUpdateParams) Update(ctx context.Context, store *drivers.Storag
 	record.Address = p.Address
 	record.Floors = p.Floors
 	record.Modified = time.Now().Format(time.RFC3339)
-	_, err := store.Set(record.ID, record)
-	return err
+	gid := store.Set(pid, record)
+	if gid == "" {
+		return ErrDBTransaction
+	}
+	return nil
 }

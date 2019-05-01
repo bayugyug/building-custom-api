@@ -6,8 +6,6 @@ import (
 )
 
 var (
-	// ErrEmptyParameter some required params empty
-	ErrEmptyParameter = errors.New("record name/id empty")
 	// ErrRecordNotFound not exists
 	ErrRecordNotFound = errors.New("record not found")
 )
@@ -27,17 +25,12 @@ func NewStorage() *Storage {
 }
 
 // Set new row
-func (q *Storage) Set(storekey string, data interface{}) (string, error) {
+func (q *Storage) Set(storekey string, data interface{}) string {
 	// ensure
 	q.Lock.Lock()
 	defer q.Lock.Unlock()
-	// check
-	if len(storekey) == 0 {
-		return "", ErrEmptyParameter
-	}
-	// check if already in store
 	q.Store[storekey] = data
-	return storekey, nil
+	return storekey
 }
 
 // Delete an old record

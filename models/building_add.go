@@ -23,6 +23,8 @@ var (
 	ErrRecordMismatch = errors.New("record id/name mismatch")
 	// ErrRecordExists data already exiss
 	ErrRecordExists = errors.New("record exists")
+	// ErrDBTransaction internal storage error
+	ErrDBTransaction = errors.New("db storage failed")
 )
 
 // BuildingCreateParams create parameter
@@ -82,5 +84,9 @@ func (p *BuildingCreateParams) Create(ctx context.Context, store *drivers.Storag
 	record.Name = p.Name
 	record.Address = p.Address
 	record.Floors = p.Floors
-	return store.Set(pid, record)
+	gid := store.Set(pid, record)
+	if gid == "" {
+		return "", ErrDBTransaction
+	}
+	return gid, nil
 }

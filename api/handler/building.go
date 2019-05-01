@@ -96,7 +96,7 @@ func (b *Building) BuildingUpdate(w http.ResponseWriter, r *http.Request) {
 			b.ReplyErrContent(w, r, http.StatusPartialContent, err.Error())
 		case models.ErrRecordNotFound:
 			//204 or 404?
-			b.ReplyErrContent(w, r, http.StatusNoContent, err.Error())
+			b.ReplyErrContent(w, r, http.StatusNotFound, err.Error())
 		default:
 			//500
 			b.ReplyErrContent(w, r, http.StatusInternalServerError, err.Error())
