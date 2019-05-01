@@ -46,12 +46,10 @@ func (p *BuildingCreateParams) Bind(r *http.Request) error {
 	}
 	p.Name = strings.TrimSpace(p.Name)
 	p.Address = strings.TrimSpace(p.Address)
-
 	//check
 	if !p.SanityCheck() {
 		return ErrMissingRequiredParameters
 	}
-
 	// just a post-process after a decode..
 	return nil
 }

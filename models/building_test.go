@@ -149,7 +149,7 @@ var _ = Describe("REST Building API Service", func() {
 
 	Context("Invalid parameters", func() {
 
-		Context("Get list of records", func() {
+		Context("Get list of records with empty list", func() {
 			It("should error", func() {
 				uparams := &models.BuildingGetOneParams{}
 				rows, err := uparams.GetAll(ctx, store)
@@ -159,7 +159,7 @@ var _ = Describe("REST Building API Service", func() {
 			})
 		})
 
-		Context("Create record", func() {
+		Context("Create record with missing parameter", func() {
 			It("should error", func() {
 				params := &models.BuildingCreateParams{
 					Address: "address of the building name",
@@ -171,7 +171,7 @@ var _ = Describe("REST Building API Service", func() {
 			})
 		})
 
-		Context("Update record", func() {
+		Context("Update record with missing parameter id", func() {
 			It("should error", func() {
 				params := &models.BuildingCreateParams{
 					Name:    "marina-bay-sands",
@@ -201,7 +201,7 @@ var _ = Describe("REST Building API Service", func() {
 			})
 		})
 
-		Context("Delete record", func() {
+		Context("Delete record with missing parameter id", func() {
 			It("should error", func() {
 				params := &models.BuildingCreateParams{
 					Name:    "marina-bay-sands-1a",
@@ -222,13 +222,13 @@ var _ = Describe("REST Building API Service", func() {
 			})
 		})
 
-		Context("Get a record", func() {
+		Context("Get a record not exists", func() {
 			It("should error", func() {
 				uparams := &models.BuildingGetOneParams{ID: "not-exists-id"}
 				row, err := uparams.Get(ctx, store)
 				Expect(err).To(HaveOccurred())
 				Expect(row).To(BeZero())
-				By("Get a data empty as expected")
+				By("Get data empty as expected")
 			})
 		})
 	}) // invalid
