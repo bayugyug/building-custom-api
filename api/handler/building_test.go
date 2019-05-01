@@ -48,8 +48,8 @@ var _ = Describe("REST Building API Service", func() {
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
 				}
-				Expect(w.Code).To(Equal(http.StatusOK))
-				Expect(response.Code).To(Equal(http.StatusOK))
+				Expect(w.Code).To(Equal(http.StatusCreated))
+				Expect(response.Code).To(Equal(http.StatusCreated))
 				By("Create data ok")
 			})
 		})
@@ -64,8 +64,8 @@ var _ = Describe("REST Building API Service", func() {
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
 				}
-				Expect(w.Code).To(Equal(http.StatusOK))
-				Expect(response.Code).To(Equal(http.StatusOK))
+				Expect(w.Code).To(Equal(http.StatusCreated))
+				Expect(response.Code).To(Equal(http.StatusCreated))
 				By("Add before update data ok")
 				//update it
 				pid, _ := response.Result.(string)
@@ -94,8 +94,8 @@ var _ = Describe("REST Building API Service", func() {
 					if err := json.Unmarshal(body, &response); err != nil {
 						Fail(err.Error())
 					}
-					Expect(w.Code).To(Equal(http.StatusOK))
-					Expect(response.Code).To(Equal(http.StatusOK))
+					Expect(w.Code).To(Equal(http.StatusCreated))
+					Expect(response.Code).To(Equal(http.StatusCreated))
 					By("Add 1x1 data ok")
 				}
 
@@ -120,8 +120,8 @@ var _ = Describe("REST Building API Service", func() {
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
 				}
-				Expect(w.Code).To(Equal(http.StatusOK))
-				Expect(response.Code).To(Equal(http.StatusOK))
+				Expect(w.Code).To(Equal(http.StatusCreated))
+				Expect(response.Code).To(Equal(http.StatusCreated))
 				By("Add record before get 1 data ok")
 
 				pid, _ := response.Result.(string)
@@ -145,8 +145,8 @@ var _ = Describe("REST Building API Service", func() {
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
 				}
-				Expect(w.Code).To(Equal(http.StatusOK))
-				Expect(response.Code).To(Equal(http.StatusOK))
+				Expect(w.Code).To(Equal(http.StatusCreated))
+				Expect(response.Code).To(Equal(http.StatusCreated))
 				By("Add before remove data ok")
 
 				pid, _ := response.Result.(string)
@@ -164,7 +164,7 @@ var _ = Describe("REST Building API Service", func() {
 
 	Context("Invalid parameters", func() {
 
-		Context("Try Create record", func() {
+		Context("Create record", func() {
 			It("should not create", func() {
 				formdata = tools.Seeder{}.CreateWithEmptyName()
 				requestBody := bytes.NewReader([]byte(formdata))
@@ -179,8 +179,32 @@ var _ = Describe("REST Building API Service", func() {
 			})
 		})
 
-		Context("Try Update record, no name, no id parameter", func() {
-			It("should not update", func() {
+		Context("Create duplicate record", func() {
+			It("should create again", func() {
+				buildingName := fmt.Sprintf("building-%s", fake.DigitsN(5))
+				formdata = tools.Seeder{}.CreateWithName(buildingName)
+				w, body := testReq(router, "POST", "/v1/api/building", bytes.NewReader([]byte(formdata)))
+				var response handler.Response
+				if err := json.Unmarshal(body, &response); err != nil {
+					Fail(err.Error())
+				}
+				Expect(w.Code).To(Equal(http.StatusCreated))
+				Expect(response.Code).To(Equal(http.StatusCreated))
+				By("Add before duplicate ok")
+				//do it again
+				w2, body2 := testReq(router, "POST", "/v1/api/building", bytes.NewReader([]byte(formdata)))
+				var response2 handler.Response
+				if err := json.Unmarshal(body2, &response2); err != nil {
+					Fail(err.Error())
+				}
+				Expect(w2.Code).To(Equal(http.StatusConflict))
+				Expect(response2.Code).To(Equal(http.StatusConflict))
+				By("Duplicate data not allowed")
+			})
+		})
+
+		Context("Create with missing name parameter", func() {
+			It("should not create", func() {
 				formdata = tools.Seeder{}.CreateWithEmptyName()
 				requestBody := bytes.NewReader([]byte(formdata))
 				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
@@ -190,7 +214,7 @@ var _ = Describe("REST Building API Service", func() {
 				}
 				Expect(w.Code).To(Equal(http.StatusPartialContent))
 				Expect(response.Code).To(Equal(http.StatusPartialContent))
-				By("Update data not done")
+				By("Create data not done")
 			})
 		})
 
@@ -204,6 +228,115 @@ var _ = Describe("REST Building API Service", func() {
 				Expect(w.Code).To(Equal(http.StatusNotFound))
 				Expect(response.Code).To(Equal(http.StatusNotFound))
 				By("Get data not found")
+			})
+		})
+
+		Context("Update record with different ID", func() {
+			It("should return not exists", func() {
+				buildingName := fmt.Sprintf("building-%s", fake.DigitsN(5))
+				formdata = tools.Seeder{}.CreateWithName(buildingName)
+				requestBody := bytes.NewReader([]byte(formdata))
+				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				var response handler.Response
+				if err := json.Unmarshal(body, &response); err != nil {
+					Fail(err.Error())
+				}
+				Expect(w.Code).To(Equal(http.StatusCreated))
+				Expect(response.Code).To(Equal(http.StatusCreated))
+				By("Add before update data ok")
+				//update it
+				pid, _ := response.Result.(string)
+				formdata = tools.Seeder{}.Update(pid+"-not-exists", buildingName)
+				requestBody = bytes.NewReader([]byte(formdata))
+				w2, body2 := testReq(router, "PUT", "/v1/api/building", requestBody)
+				var response2 handler.Response
+				if err := json.Unmarshal(body2, &response2); err != nil {
+					Fail(err.Error())
+				}
+				Expect(w2.Code).To(Equal(http.StatusNoContent))
+				Expect(response2.Code).To(Equal(http.StatusNoContent))
+				By("Update data did not continue")
+			})
+		})
+
+		Context("Update record with different name", func() {
+			It("should return not exists", func() {
+				buildingName := fmt.Sprintf("building-%s", fake.DigitsN(5))
+				formdata = tools.Seeder{}.CreateWithName(buildingName)
+				requestBody := bytes.NewReader([]byte(formdata))
+				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				var response handler.Response
+				if err := json.Unmarshal(body, &response); err != nil {
+					Fail(err.Error())
+				}
+				Expect(w.Code).To(Equal(http.StatusCreated))
+				Expect(response.Code).To(Equal(http.StatusCreated))
+				By("Add before update data ok")
+				//update it
+				pid, _ := response.Result.(string)
+				formdata = tools.Seeder{}.Update(pid, buildingName+"-diff-name")
+				requestBody = bytes.NewReader([]byte(formdata))
+				w2, body2 := testReq(router, "PUT", "/v1/api/building", requestBody)
+				var response2 handler.Response
+				if err := json.Unmarshal(body2, &response2); err != nil {
+					Fail(err.Error())
+				}
+				Expect(w2.Code).To(Equal(http.StatusConflict))
+				Expect(response2.Code).To(Equal(http.StatusConflict))
+				By("Update data did not continue")
+			})
+		})
+
+		Context("Update record with missing required parameter", func() {
+			It("should not update", func() {
+				buildingName := fmt.Sprintf("building-%s", fake.DigitsN(5))
+				formdata = tools.Seeder{}.CreateWithName(buildingName)
+				requestBody := bytes.NewReader([]byte(formdata))
+				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				var response handler.Response
+				if err := json.Unmarshal(body, &response); err != nil {
+					Fail(err.Error())
+				}
+				Expect(w.Code).To(Equal(http.StatusCreated))
+				Expect(response.Code).To(Equal(http.StatusCreated))
+				By("Add before update data ok")
+				//update it
+				pid, _ := response.Result.(string)
+				formdata = tools.Seeder{}.Update(pid, "")
+				requestBody = bytes.NewReader([]byte(formdata))
+				w2, body2 := testReq(router, "PUT", "/v1/api/building", requestBody)
+				var response2 handler.Response
+				if err := json.Unmarshal(body2, &response2); err != nil {
+					Fail(err.Error())
+				}
+				Expect(w2.Code).To(Equal(http.StatusPartialContent))
+				Expect(response2.Code).To(Equal(http.StatusPartialContent))
+				By("Update data did not continue")
+			})
+		})
+
+		Context("Delete a not existsing record", func() {
+			It("should return ok", func() {
+				formdata = tools.Seeder{}.Create()
+				requestBody := bytes.NewReader([]byte(formdata))
+				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				var response handler.Response
+				if err := json.Unmarshal(body, &response); err != nil {
+					Fail(err.Error())
+				}
+				Expect(w.Code).To(Equal(http.StatusCreated))
+				Expect(response.Code).To(Equal(http.StatusCreated))
+				By("Add before remove data ok")
+
+				pid, _ := response.Result.(string)
+				w2, body2 := testReq(router, "DELETE", "/v1/api/building/"+pid+"not-exists", nil)
+				var response2 handler.Response
+				if err := json.Unmarshal(body2, &response2); err != nil {
+					Fail(err.Error())
+				}
+				Expect(w2.Code).To(Equal(http.StatusNotFound))
+				Expect(response2.Code).To(Equal(http.StatusNotFound))
+				By("Remove data did not continue")
 			})
 		})
 	}) // invalid params

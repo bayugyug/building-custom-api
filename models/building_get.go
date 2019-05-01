@@ -22,10 +22,8 @@ func (p *BuildingGetOneParams) Get(ctx context.Context, store *drivers.Storage) 
 	if err != nil {
 		return nil, err
 	}
-
 	var rec *BuildingData
 	var valid bool
-
 	if rec, valid = data.(*BuildingData); valid {
 		return rec, nil
 	}
@@ -39,14 +37,11 @@ func (p *BuildingGetOneParams) GetAll(ctx context.Context, store *drivers.Storag
 	if err != nil {
 		return nil, err
 	}
-
 	var all []*BuildingData
-
 	//empty
 	if len(data) <= 0 {
 		return all, ErrRecordsNotFound
 	}
-
 	for _, vv := range data {
 		if row, valid := vv.(*BuildingData); valid {
 			all = append(all, row)

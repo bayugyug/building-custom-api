@@ -2,7 +2,6 @@ package models
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -49,7 +48,7 @@ func (p *BuildingUpdateParams) SanityCheck() bool {
 
 // Update a row from the store
 func (p *BuildingUpdateParams) Update(ctx context.Context, store *drivers.Storage) error {
-	//check
+	//should not happen :-)
 	if !p.SanityCheck() {
 		return ErrMissingRequiredParameters
 	}
@@ -58,12 +57,10 @@ func (p *BuildingUpdateParams) Update(ctx context.Context, store *drivers.Storag
 	if !oks {
 		return ErrRecordNotFound
 	}
-
 	//check the hashkey
 	record := NewBuildingData()
 	pid := record.HashKey(p.Name)
 	if pid != p.ID {
-		log.Println(pid, "==================", p.ID, "==", p.Name)
 		return ErrRecordMismatch
 	}
 	//convert db data

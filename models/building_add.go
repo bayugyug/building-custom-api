@@ -21,6 +21,8 @@ var (
 	ErrRecordNotFound = errors.New("record not found")
 	// ErrRecordMismatch generated hashkey by name is a mismatch
 	ErrRecordMismatch = errors.New("record id/name mismatch")
+	// ErrRecordExists data already exiss
+	ErrRecordExists = errors.New("record exists")
 )
 
 // BuildingCreateParams create parameter
@@ -65,25 +67,18 @@ func (p *BuildingCreateParams) SanityCheck() bool {
 
 // Create add a row from the store
 func (p *BuildingCreateParams) Create(ctx context.Context, store *drivers.Storage) (string, error) {
-	//check
+	//should not happen
 	if !p.SanityCheck() {
 		return "", ErrMissingRequiredParameters
 	}
-
 	record := NewBuildingData()
 	pid := record.HashKey(p.Name)
-
-	if row, oks := store.Exists(pid); oks {
-		//allow an update for now ;-)
-		if vrow, ok := row.(*BuildingData); ok {
-			record = vrow
-		}
-		record.Modified = time.Now().Format(time.RFC3339)
-	} else {
-		record.ID = pid
-		record.Created = time.Now().Format(time.RFC3339)
+	if _, oks := store.Exists(pid); oks {
+		return "", ErrRecordExists
 	}
 	//set row
+	record.ID = pid
+	record.Created = time.Now().Format(time.RFC3339)
 	record.Name = p.Name
 	record.Address = p.Address
 	record.Floors = p.Floors
