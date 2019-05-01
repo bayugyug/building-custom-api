@@ -42,8 +42,8 @@ var _ = Describe("REST Building API Service", func() {
 		Context("Create record", func() {
 			It("should return ok", func() {
 				formdata = tools.Seeder{}.Create()
-				requestBody := bytes.NewReader([]byte(formdata))
-				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				w, body := testReq(router, "POST", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response handler.Response
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
@@ -58,8 +58,8 @@ var _ = Describe("REST Building API Service", func() {
 			It("should return ok", func() {
 				buildingName := fmt.Sprintf("building-%s", fake.DigitsN(5))
 				formdata = tools.Seeder{}.CreateWithName(buildingName)
-				requestBody := bytes.NewReader([]byte(formdata))
-				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				w, body := testReq(router, "POST", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response handler.Response
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
@@ -70,8 +70,8 @@ var _ = Describe("REST Building API Service", func() {
 				//update it
 				pid, _ := response.Result.(string)
 				formdata = tools.Seeder{}.Update(pid, buildingName)
-				requestBody = bytes.NewReader([]byte(formdata))
-				w2, body2 := testReq(router, "PUT", "/v1/api/building", requestBody)
+				w2, body2 := testReq(router, "PUT", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response2 handler.Response
 				if err := json.Unmarshal(body2, &response2); err != nil {
 					Fail(err.Error())
@@ -88,8 +88,8 @@ var _ = Describe("REST Building API Service", func() {
 				//5 row
 				for i := 0; i < 5; i++ {
 					formdata = tools.Seeder{}.Create()
-					requestBody := bytes.NewReader([]byte(formdata))
-					w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+					w, body := testReq(router, "POST", "/v1/api/building",
+						bytes.NewReader([]byte(formdata)))
 					var response handler.Response
 					if err := json.Unmarshal(body, &response); err != nil {
 						Fail(err.Error())
@@ -115,8 +115,8 @@ var _ = Describe("REST Building API Service", func() {
 		Context("Get 1 record", func() {
 			It("should return ok", func() {
 				formdata = tools.Seeder{}.Create()
-				requestBody := bytes.NewReader([]byte(formdata))
-				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				w, body := testReq(router, "POST", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response handler.Response
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
@@ -140,8 +140,8 @@ var _ = Describe("REST Building API Service", func() {
 		Context("Delete a record", func() {
 			It("should return ok", func() {
 				formdata = tools.Seeder{}.Create()
-				requestBody := bytes.NewReader([]byte(formdata))
-				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				w, body := testReq(router, "POST", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response handler.Response
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
@@ -165,8 +165,8 @@ var _ = Describe("REST Building API Service", func() {
 		Context("Create record with minimum parameter", func() {
 			It("should return ok", func() {
 				formdata = tools.Seeder{}.CreateMin()
-				requestBody := bytes.NewReader([]byte(formdata))
-				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				w, body := testReq(router, "POST", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response handler.Response
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
@@ -184,8 +184,8 @@ var _ = Describe("REST Building API Service", func() {
 		Context("Create with empty name parameter", func() {
 			It("should not create", func() {
 				formdata = tools.Seeder{}.CreateWithEmptyName()
-				requestBody := bytes.NewReader([]byte(formdata))
-				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				w, body := testReq(router, "POST", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response handler.Response
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
@@ -220,8 +220,8 @@ var _ = Describe("REST Building API Service", func() {
 		Context("Create with missing name parameter", func() {
 			It("should not create", func() {
 				formdata = tools.Seeder{}.CreateWithEmptyName()
-				requestBody := bytes.NewReader([]byte(formdata))
-				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				w, body := testReq(router, "POST", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response handler.Response
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
@@ -247,8 +247,8 @@ var _ = Describe("REST Building API Service", func() {
 			It("should return not exists", func() {
 				buildingName := fmt.Sprintf("building-%s", fake.DigitsN(5))
 				formdata = tools.Seeder{}.CreateWithName(buildingName)
-				requestBody := bytes.NewReader([]byte(formdata))
-				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				w, body := testReq(router, "POST", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response handler.Response
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
@@ -258,8 +258,8 @@ var _ = Describe("REST Building API Service", func() {
 				//update it
 				pid, _ := response.Result.(string)
 				formdata = tools.Seeder{}.Update(pid+"-not-exists", buildingName)
-				requestBody = bytes.NewReader([]byte(formdata))
-				w2, body2 := testReq(router, "PUT", "/v1/api/building", requestBody)
+				w2, body2 := testReq(router, "PUT", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response2 handler.Response
 				if err := json.Unmarshal(body2, &response2); err != nil {
 					Fail(err.Error())
@@ -273,8 +273,8 @@ var _ = Describe("REST Building API Service", func() {
 			It("should return not exists", func() {
 				buildingName := fmt.Sprintf("building-%s", fake.DigitsN(5))
 				formdata = tools.Seeder{}.CreateWithName(buildingName)
-				requestBody := bytes.NewReader([]byte(formdata))
-				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				w, body := testReq(router, "POST", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response handler.Response
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
@@ -284,8 +284,8 @@ var _ = Describe("REST Building API Service", func() {
 				//update it
 				pid, _ := response.Result.(string)
 				formdata = tools.Seeder{}.Update(pid, buildingName+"-diff-name")
-				requestBody = bytes.NewReader([]byte(formdata))
-				w2, body2 := testReq(router, "PUT", "/v1/api/building", requestBody)
+				w2, body2 := testReq(router, "PUT", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response2 handler.Response
 				if err := json.Unmarshal(body2, &response2); err != nil {
 					Fail(err.Error())
@@ -299,8 +299,8 @@ var _ = Describe("REST Building API Service", func() {
 			It("should not update", func() {
 				buildingName := fmt.Sprintf("building-%s", fake.DigitsN(5))
 				formdata = tools.Seeder{}.CreateWithName(buildingName)
-				requestBody := bytes.NewReader([]byte(formdata))
-				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				w, body := testReq(router, "POST", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response handler.Response
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
@@ -310,8 +310,8 @@ var _ = Describe("REST Building API Service", func() {
 				//update it
 				pid, _ := response.Result.(string)
 				formdata = tools.Seeder{}.Update(pid, "")
-				requestBody = bytes.NewReader([]byte(formdata))
-				w2, body2 := testReq(router, "PUT", "/v1/api/building", requestBody)
+				w2, body2 := testReq(router, "PUT", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response2 handler.Response
 				if err := json.Unmarshal(body2, &response2); err != nil {
 					Fail(err.Error())
@@ -324,8 +324,8 @@ var _ = Describe("REST Building API Service", func() {
 		Context("Delete not existing record", func() {
 			It("should return ok", func() {
 				formdata = tools.Seeder{}.Create()
-				requestBody := bytes.NewReader([]byte(formdata))
-				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				w, body := testReq(router, "POST", "/v1/api/building",
+					bytes.NewReader([]byte(formdata)))
 				var response handler.Response
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
