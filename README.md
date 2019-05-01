@@ -69,23 +69,19 @@
 
 ### Mini-How-To on running the api binary
 
-	[x] The api can accept a json format configuration
-	
-	[x] Fields:
-	
+- The api can accept a json format configuration
+	- Fields:
 		- port      = port to run the http server (default: 8989)
-		
-	[x] Sanity check either of the 2 choices below
-	    
+
+- Sanity check
 		a. ginkgo ./...	
 		b. make test
-		
-			
-	[x] Run from the console
+
+- Run from the console
 
 ```sh
 
-	./building-custom-api --config '{"port":"8989"}'
+./building-custom-api --config '{"port":"8989"}'
 
 ```
 
