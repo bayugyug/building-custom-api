@@ -3,10 +3,10 @@ package models
 import (
 	"context"
 
-	"github.com/bayugyug/building-custom-api/driver"
+	"github.com/bayugyug/building-custom-api/drivers"
 )
 
-// BuildingDeleteParams delete params
+// BuildingDeleteParams delete parameter
 type BuildingDeleteParams struct {
 	ID string `json:"ID,required"`
 }
@@ -17,6 +17,6 @@ func NewBuildingDelete(pid string) *BuildingDeleteParams {
 }
 
 // Remove delete a row from the store base on id
-func (params *BuildingDeleteParams) Remove(ctx context.Context, store *driver.Storage) error {
-	return store.Delete(params.ID)
+func (p *BuildingDeleteParams) Remove(ctx context.Context, store *drivers.Storage) error {
+	return store.Delete(p.ID)
 }

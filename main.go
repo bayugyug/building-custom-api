@@ -5,8 +5,8 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/bayugyug/building-custom-api/config"
-	"github.com/bayugyug/building-custom-api/controllers"
+	"github.com/bayugyug/building-custom-api/api/routes"
+	"github.com/bayugyug/building-custom-api/configs"
 )
 
 const (
@@ -39,7 +39,7 @@ func main() {
 	var err error
 
 	//init
-	appcfg := config.NewAppSettings()
+	appcfg := configs.NewAppSettings()
 
 	//check
 	if appcfg.Config == nil {
@@ -47,14 +47,14 @@ func main() {
 	}
 
 	//init service
-	if controllers.APIInstance, err = controllers.NewAPIService(
-		controllers.WithSvcOptAddress(":" + appcfg.Config.Port),
+	if routes.Service, err = routes.NewAPIService(
+		routes.WithSvcOptAddress(":" + appcfg.Config.Port),
 	); err != nil {
 		log.Fatal("Oops! config might be missing", err)
 	}
 
 	//run service
-	controllers.APIInstance.Run()
+	routes.Service.Run()
 	log.Println("Since", time.Since(start))
 	log.Println("Done")
 }

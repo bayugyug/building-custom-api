@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bayugyug/building-custom-api/driver"
+	"github.com/bayugyug/building-custom-api/drivers"
 )
 
 var (
-	// ErrMissingRequiredParameters reqd params missing
+	// ErrMissingRequiredParameters reqd parameter missing
 	ErrMissingRequiredParameters = errors.New("missing required parameter")
 	// ErrorNotFound record not found
 	ErrorNotFound = errors.New("record not found")
@@ -19,9 +19,11 @@ var (
 	ErrRecordsNotFound = errors.New("record(s) not found")
 	// ErrRecordNotFound data not exiss
 	ErrRecordNotFound = errors.New("record not found")
+	// ErrRecordMismatch generated hashkey by name is a mismatch
+	ErrRecordMismatch = errors.New("record id/name mismatch")
 )
 
-// BuildingCreateParams create params
+// BuildingCreateParams create parameter
 type BuildingCreateParams struct {
 	Name    string   `json:"name,required"`
 	Address string   `json:"address,required"`
@@ -34,17 +36,17 @@ func NewBuildingCreate() *BuildingCreateParams {
 
 }
 
-// Bind filter params
-func (params *BuildingCreateParams) Bind(r *http.Request) error {
+// Bind filter parameter
+func (p *BuildingCreateParams) Bind(r *http.Request) error {
 	//sanity check
-	if params == nil {
+	if p == nil {
 		return ErrMissingRequiredParameters
 	}
-	params.Name = strings.TrimSpace(params.Name)
-	params.Address = strings.TrimSpace(params.Address)
+	p.Name = strings.TrimSpace(p.Name)
+	p.Address = strings.TrimSpace(p.Address)
 
 	//check
-	if !params.SanityCheck() {
+	if !p.SanityCheck() {
 		return ErrMissingRequiredParameters
 	}
 
@@ -52,34 +54,38 @@ func (params *BuildingCreateParams) Bind(r *http.Request) error {
 	return nil
 }
 
-// SanityCheck filter required params
-func (params *BuildingCreateParams) SanityCheck() bool {
-	if params.Name == "" || params.Address == "" ||
-		len(params.Floors) == 0 {
+// SanityCheck filter required parameter
+func (p *BuildingCreateParams) SanityCheck() bool {
+	if p.Name == "" || p.Address == "" ||
+		len(p.Floors) == 0 {
 		return false
 	}
 	return true
 }
 
 // Create add a row from the store
-func (params *BuildingCreateParams) Create(ctx context.Context, store *driver.Storage) (string, error) {
+func (p *BuildingCreateParams) Create(ctx context.Context, store *drivers.Storage) (string, error) {
 	//check
-	if !params.SanityCheck() {
+	if !p.SanityCheck() {
 		return "", ErrMissingRequiredParameters
 	}
 
-	record := driver.NewBuildingData()
-	pid := record.StoreKey(params.Name)
+	record := NewBuildingData()
+	pid := record.HashKey(p.Name)
 
-	if oks := store.Exists(pid); oks {
+	if row, oks := store.Exists(pid); oks {
+		//allow an update for now ;-)
+		if vrow, ok := row.(*BuildingData); ok {
+			record = vrow
+		}
 		record.Modified = time.Now().Format(time.RFC3339)
 	} else {
+		record.ID = pid
 		record.Created = time.Now().Format(time.RFC3339)
 	}
 	//set row
-	record.ID = pid
-	record.Name = params.Name
-	record.Address = params.Address
-	record.Floors = params.Floors
+	record.Name = p.Name
+	record.Address = p.Address
+	record.Floors = p.Floors
 	return store.Set(pid, record)
 }

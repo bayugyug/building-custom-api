@@ -3,10 +3,10 @@ package models
 import (
 	"context"
 
-	"github.com/bayugyug/building-custom-api/driver"
+	"github.com/bayugyug/building-custom-api/drivers"
 )
 
-// BuildingGetOneParams delete params
+// BuildingGetOneParams delete parameter
 type BuildingGetOneParams struct {
 	ID string `json:"ID"`
 }
@@ -17,16 +17,16 @@ func NewBuildingGetOne(id string) *BuildingGetOneParams {
 }
 
 // Get query from the store base on id
-func (params *BuildingGetOneParams) Get(ctx context.Context, store *driver.Storage) (*driver.BuildingData, error) {
-	data, err := store.GetOne(params.ID)
+func (p *BuildingGetOneParams) Get(ctx context.Context, store *drivers.Storage) (*BuildingData, error) {
+	data, err := store.GetOne(p.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	var rec *driver.BuildingData
+	var rec *BuildingData
 	var valid bool
 
-	if rec, valid = data.(*driver.BuildingData); valid {
+	if rec, valid = data.(*BuildingData); valid {
 		return rec, nil
 	}
 	//not found
@@ -34,13 +34,13 @@ func (params *BuildingGetOneParams) Get(ctx context.Context, store *driver.Stora
 }
 
 // GetAll query from the store base on id
-func (params *BuildingGetOneParams) GetAll(ctx context.Context, store *driver.Storage) ([]*driver.BuildingData, error) {
+func (p *BuildingGetOneParams) GetAll(ctx context.Context, store *drivers.Storage) ([]*BuildingData, error) {
 	data, err := store.GetAll()
 	if err != nil {
 		return nil, err
 	}
 
-	var all []*driver.BuildingData
+	var all []*BuildingData
 
 	//empty
 	if len(data) <= 0 {
@@ -48,7 +48,7 @@ func (params *BuildingGetOneParams) GetAll(ctx context.Context, store *driver.St
 	}
 
 	for _, vv := range data {
-		if row, valid := vv.(*driver.BuildingData); valid {
+		if row, valid := vv.(*BuildingData); valid {
 			all = append(all, row)
 		}
 	}

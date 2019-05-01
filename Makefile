@@ -10,11 +10,11 @@ build :
 	CGO_ENABLED=0 GOOS=linux go build -o $(BUILD_NAME) -a -tags netgo -installsuffix netgo -installsuffix cgo -v -ldflags "-X main.BuildTime=$(BUILD_TIME) " .
 
 test : build
-	go test ./... > testrun.txt
+	go test $(go list ./... | grep -v /vendor/) > testrun.txt
 	golint > lint.txt
-	go tool vet -v . > vet.txt
+	go vet -v ./... > vet.txt
 	gocov test github.com/bayugyug/building-custom-api | gocov-xml > coverage.xml
-	go test ./... -bench=. -test.benchmem -v 2>/dev/null | gobench2plot > benchmarks.xml
+	go test $(go list ./... | grep -v /vendor/) -bench=. -test.benchmem -v 2>/dev/null | gobench2plot > benchmarks.xml
 	ginkgo -v  ./...
 
 testginkgo : build

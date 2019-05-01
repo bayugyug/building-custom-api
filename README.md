@@ -6,19 +6,9 @@
 
 
 
-### Pre-Requisite
-	
-	- Please run this in your command line to ensure packages are in-place.
-	  (normally these will be handled when compiling the api binary)
-	
-		go get -v github.com/go-chi/chi
-		go get -v github.com/go-chi/chi/middleware
-		go get -v github.com/go-chi/cors
-		go get -v github.com/go-chi/render
-		go get -v github.com/onsi/ginkgo/ginkgo
-		go get -v github.com/onsi/gomega/... 
-		go get -v github.com/icrowley/fake
-
+### Pre-Requisite / Devt dependencies
+- Dependencies manager: Dep - https://github.com/golang/dep
+- Testing framework: ginkgo - https://github.com/onsi/ginkgo
 
 ### Compile
 
