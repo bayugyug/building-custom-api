@@ -10,51 +10,58 @@ var (
 	ErrRecordNotFound = errors.New("record not found")
 )
 
+// StorageDriver in-memory map
+type StorageDriver interface {
+	Set(key string, data interface{}) string
+	Unset(key string) error
+	One(key string) (interface{}, error)
+	All() ([]interface{}, error)
+}
+
 // Storage in-memory map
 type Storage struct {
-	Store map[string]interface{}
-	Lock  *sync.Mutex
+	store map[string]interface{}
+	mtx   *sync.Mutex
 }
 
 // NewStorage new storage object
 func NewStorage() *Storage {
 	return &Storage{
-		Store: make(map[string]interface{}),
-		Lock:  new(sync.Mutex),
+		store: make(map[string]interface{}),
+		mtx:   new(sync.Mutex),
 	}
 }
 
 // Set new row
 func (q *Storage) Set(key string, data interface{}) string {
 	// ensure
-	q.Lock.Lock()
-	defer q.Lock.Unlock()
-	q.Store[key] = data
+	q.mtx.Lock()
+	defer q.mtx.Unlock()
+	q.store[key] = data
 	return key
 }
 
-// Delete an old record
-func (q *Storage) Delete(key string) error {
+// Unset an old record
+func (q *Storage) Unset(key string) error {
 	// ensure
-	q.Lock.Lock()
-	defer q.Lock.Unlock()
-
-	if _, oks := q.Store[key]; oks {
+	q.mtx.Lock()
+	defer q.mtx.Unlock()
+	if _, oks := q.store[key]; oks {
 		//delete
-		delete(q.Store, key)
+		delete(q.store, key)
 		return nil
 	}
 	//give it back ;-)
 	return ErrRecordNotFound
 }
 
-// GetOne 1 record
-func (q *Storage) GetOne(key string) (interface{}, error) {
+// One get 1 record
+func (q *Storage) One(key string) (interface{}, error) {
 	// ensure
-	q.Lock.Lock()
-	defer q.Lock.Unlock()
+	q.mtx.Lock()
+	defer q.mtx.Unlock()
 
-	data, oks := q.Store[key]
+	data, oks := q.store[key]
 	if !oks {
 		return nil, ErrRecordNotFound
 	}
@@ -62,14 +69,14 @@ func (q *Storage) GetOne(key string) (interface{}, error) {
 	return data, nil
 }
 
-// GetAll all the records
-func (q *Storage) GetAll() ([]interface{}, error) {
+// All get list of all the records
+func (q *Storage) All() ([]interface{}, error) {
 	// ensure
-	q.Lock.Lock()
-	defer q.Lock.Unlock()
+	q.mtx.Lock()
+	defer q.mtx.Unlock()
 
 	var all []interface{}
-	for _, row := range q.Store {
+	for _, row := range q.store {
 		all = append(all, row)
 	}
 	//give it back ;-)
@@ -79,18 +86,18 @@ func (q *Storage) GetAll() ([]interface{}, error) {
 // Exists check the record
 func (q *Storage) Exists(key string) (interface{}, bool) {
 	// ensure
-	q.Lock.Lock()
-	defer q.Lock.Unlock()
-	row, oks := q.Store[key]
+	q.mtx.Lock()
+	defer q.mtx.Unlock()
+	row, oks := q.store[key]
 	//give it back ;-)
 	return row, oks
 }
 
-// Len check total len
-func (q *Storage) Len() int {
+// Count check total len
+func (q *Storage) Count() int {
 	// ensure
-	q.Lock.Lock()
-	defer q.Lock.Unlock()
+	q.mtx.Lock()
+	defer q.mtx.Unlock()
 	//give it back ;-)
-	return len(q.Store)
+	return len(q.store)
 }

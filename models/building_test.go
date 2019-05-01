@@ -91,7 +91,7 @@ var _ = Describe("REST Building API Service", func() {
 				By("Create data before delete ok")
 
 				uparams := models.NewBuildingDelete(pid)
-				err = uparams.Remove(ctx, store)
+				err = uparams.Delete(ctx, store)
 				if err != nil {
 					Fail(err.Error())
 				}
@@ -240,7 +240,7 @@ var _ = Describe("REST Building API Service", func() {
 				By("Create data before delete ok")
 
 				uparams := models.NewBuildingDelete(pid + "no-id")
-				err = uparams.Remove(ctx, store)
+				err = uparams.Delete(ctx, store)
 				Expect(err).To(HaveOccurred())
 				By("Delete data empty as expected")
 			})

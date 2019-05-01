@@ -16,10 +16,10 @@ func NewBuildingDelete(pid string) *BuildingDeleteParams {
 	return &BuildingDeleteParams{ID: pid}
 }
 
-// Remove delete a row from the store base on id
-func (p *BuildingDeleteParams) Remove(ctx context.Context, store *drivers.Storage) error {
+// Delete remove a row from the store base on id
+func (p *BuildingDeleteParams) Delete(ctx context.Context, store *drivers.Storage) error {
 	if _, oks := store.Exists(p.ID); !oks {
 		return ErrRecordNotFound
 	}
-	return store.Delete(p.ID)
+	return store.Unset(p.ID)
 }

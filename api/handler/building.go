@@ -13,13 +13,13 @@ import (
 	"github.com/go-chi/render"
 )
 
-// APIEndpoints the end-points-url mapping
-type APIEndpoints interface {
-	BuildCreate(w http.ResponseWriter, r *http.Request)
-	BuildingUpdate(w http.ResponseWriter, r *http.Request)
-	BuildingGet(w http.ResponseWriter, r *http.Request)
-	BuildingGetOne(w http.ResponseWriter, r *http.Request)
-	BuildingDelete(w http.ResponseWriter, r *http.Request)
+// BuildingEndpoints the end-points-url mapping
+type BuildingEndpoints interface {
+	Create(w http.ResponseWriter, r *http.Request)
+	Update(w http.ResponseWriter, r *http.Request)
+	GetAll(w http.ResponseWriter, r *http.Request)
+	GetOne(w http.ResponseWriter, r *http.Request)
+	Delete(w http.ResponseWriter, r *http.Request)
 }
 
 // Response is the reply object
@@ -43,8 +43,8 @@ func (b *Building) Welcome(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// BuildCreate save a row in store
-func (b *Building) BuildCreate(w http.ResponseWriter, r *http.Request) {
+// Create save a row in store
+func (b *Building) Create(w http.ResponseWriter, r *http.Request) {
 	data := models.NewBuildingCreate()
 	//sanity check
 	if err := render.Bind(r, data); err != nil {
@@ -76,8 +76,8 @@ func (b *Building) BuildCreate(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// BuildingUpdate update row in store
-func (b *Building) BuildingUpdate(w http.ResponseWriter, r *http.Request) {
+// Update update row in store
+func (b *Building) Update(w http.ResponseWriter, r *http.Request) {
 	data := models.NewBuildingUpdate()
 	//sanity check
 	if err := render.Bind(r, data); err != nil {
@@ -109,8 +109,8 @@ func (b *Building) BuildingUpdate(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// BuildingGet list all
-func (b *Building) BuildingGet(w http.ResponseWriter, r *http.Request) {
+// GetAll list all
+func (b *Building) GetAll(w http.ResponseWriter, r *http.Request) {
 	data := &models.BuildingGetParams{}
 	//check
 	rows, err := data.GetAll(b.Context, b.Storage)
@@ -128,8 +128,8 @@ func (b *Building) BuildingGet(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// BuildingGetOne get 1 row per id
-func (b *Building) BuildingGetOne(w http.ResponseWriter, r *http.Request) {
+// GetOne get 1 row per id
+func (b *Building) GetOne(w http.ResponseWriter, r *http.Request) {
 	data := models.NewBuildingGetOne(strings.TrimSpace(chi.URLParam(r, "id")))
 	//chk
 	if data.ID == "" {
@@ -152,8 +152,8 @@ func (b *Building) BuildingGetOne(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// BuildingDelete remove from store
-func (b *Building) BuildingDelete(w http.ResponseWriter, r *http.Request) {
+// Delete remove from store
+func (b *Building) Delete(w http.ResponseWriter, r *http.Request) {
 	data := models.NewBuildingDelete(strings.TrimSpace(chi.URLParam(r, "id")))
 	//chk
 	if data.ID == "" {
@@ -162,7 +162,7 @@ func (b *Building) BuildingDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//chk
-	if err := data.Remove(b.Context, b.Storage); err != nil {
+	if err := data.Delete(b.Context, b.Storage); err != nil {
 		switch err {
 		case models.ErrRecordNotFound:
 			//404

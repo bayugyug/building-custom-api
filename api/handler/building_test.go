@@ -20,21 +20,21 @@ import (
 )
 
 var _ = Describe("REST Building API Service", func() {
-
 	//init
-	var formdata string
-	var router *chi.Mux
-	routes.Service, _ = routes.NewAPIService(
+	service, _ := routes.NewAPIService(
 		routes.WithSvcOptAddress(":8989"),
 	)
 
+	var formdata string
+	var router *chi.Mux
+
 	BeforeEach(func() {
 		router = chi.NewRouter()
-		router.Post("/v1/api/building", routes.Service.API.BuildCreate)
-		router.Put("/v1/api/building", routes.Service.API.BuildingUpdate)
-		router.Get("/v1/api/building", routes.Service.API.BuildingGet)
-		router.Get("/v1/api/building/{id}", routes.Service.API.BuildingGetOne)
-		router.Delete("/v1/api/building/{id}", routes.Service.API.BuildingDelete)
+		router.Post("/v1/api/building", service.Building.Create)
+		router.Put("/v1/api/building", service.Building.Update)
+		router.Get("/v1/api/building", service.Building.GetAll)
+		router.Get("/v1/api/building/{id}", service.Building.GetOne)
+		router.Delete("/v1/api/building/{id}", service.Building.Delete)
 	})
 
 	Context("Valid parameters", func() {

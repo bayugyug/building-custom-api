@@ -18,7 +18,7 @@ func NewBuildingGetOne(id string) *BuildingGetParams {
 
 // Get query from the store base on id
 func (p *BuildingGetParams) Get(ctx context.Context, store *drivers.Storage) (*BuildingData, error) {
-	data, err := store.GetOne(p.ID)
+	data, err := store.One(p.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (p *BuildingGetParams) Get(ctx context.Context, store *drivers.Storage) (*B
 
 // GetAll query from the store base on id
 func (p *BuildingGetParams) GetAll(ctx context.Context, store *drivers.Storage) ([]*BuildingData, error) {
-	data, err := store.GetAll()
+	data, err := store.All()
 	if err != nil {
 		return nil, err
 	}

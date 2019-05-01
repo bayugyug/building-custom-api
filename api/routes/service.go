@@ -26,14 +26,11 @@ const (
 	svcOptionWithStore   = "svc-opts-store"
 )
 
-// Service exposed var object
-var Service *APIService
-
 // APIService the svc map
 type APIService struct {
-	API     *handler.Building
-	Router  *chi.Mux
-	Address string
+	Building *handler.Building
+	Router   *chi.Mux
+	Address  string
 }
 
 // WithSvcOptHandler opts for handler
@@ -57,7 +54,7 @@ func NewAPIService(opts ...*configs.Option) (*APIService, error) {
 	//default
 	svc := &APIService{
 		Address: ":8989",
-		API: &handler.Building{
+		Building: &handler.Building{
 			Storage: drivers.NewStorage(),
 			Context: context.Background(),
 		},
@@ -145,7 +142,7 @@ func (svc *APIService) MapRoute() *chi.Mux {
 
 	router.Use(cors.Handler)
 
-	router.Get("/", svc.API.Welcome)
+	router.Get("/", svc.Building.Welcome)
 
 	/*
 		@end-points
@@ -160,17 +157,17 @@ func (svc *APIService) MapRoute() *chi.Mux {
 	//end-points-mapping
 	router.Route("/v1", func(r chi.Router) {
 		r.Mount("/api",
-			func(API *handler.Building) *chi.Mux {
+			func(h *handler.Building) *chi.Mux {
 				sr := chi.NewRouter()
-				sr.Get("/health", svc.API.HealthCheck)
-				sr.Post("/building", API.BuildCreate)
-				sr.Put("/building", API.BuildingUpdate)
-				sr.Patch("/building", API.BuildingUpdate)
-				sr.Get("/building", API.BuildingGet)
-				sr.Get("/building/{id}", API.BuildingGetOne)
-				sr.Delete("/building/{id}", API.BuildingDelete)
+				sr.Get("/health", h.HealthCheck)
+				sr.Post("/building", h.Create)
+				sr.Put("/building", h.Update)
+				sr.Patch("/building", h.Update)
+				sr.Get("/building", h.GetAll)
+				sr.Get("/building/{id}", h.GetOne)
+				sr.Delete("/building/{id}", h.Delete)
 				return sr
-			}(svc.API))
+			}(svc.Building))
 	})
 	//show
 	walkFunc := func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {

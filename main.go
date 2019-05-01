@@ -32,7 +32,6 @@ func init() {
 }
 
 func main() {
-	var err error
 	start := time.Now()
 	log.Println(APIVersion)
 	//init
@@ -42,13 +41,14 @@ func main() {
 		log.Fatal("Oops! Config missing")
 	}
 	//init service
-	if routes.Service, err = routes.NewAPIService(
+	service, err := routes.NewAPIService(
 		routes.WithSvcOptAddress(":" + appcfg.Config.Port),
-	); err != nil {
+	)
+	if err != nil {
 		log.Fatal("Oops! config might be missing", err)
 	}
 	//run service
-	routes.Service.Run()
+	service.Run()
 	log.Println("Since", time.Since(start))
 	log.Println("Done")
 }
