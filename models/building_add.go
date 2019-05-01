@@ -13,8 +13,6 @@ import (
 var (
 	// ErrMissingRequiredParameters reqd parameter missing
 	ErrMissingRequiredParameters = errors.New("missing required parameter")
-	// ErrorNotFound record not found
-	ErrorNotFound = errors.New("record not found")
 	// ErrRecordsNotFound list is empty
 	ErrRecordsNotFound = errors.New("record(s) not found")
 	// ErrRecordNotFound data not exiss
