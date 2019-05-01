@@ -185,11 +185,19 @@ func (svc *APIService) MapRoute() *chi.Mux {
 }
 
 //SetContextKeyVal version context
-func (svc *APIService) SetContextKeyVal(k, v string) func(next http.Handler) http.Handler {
+func (svc *APIService) SetContextKeyVal(k *serviceContextKey, v interface{}) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			r = r.WithContext(context.WithValue(r.Context(), k, v))
 			next.ServeHTTP(w, r)
 		})
 	}
+}
+
+type serviceContextKey struct {
+	name string
+}
+
+func (k *serviceContextKey) String() string {
+	return k.name
 }

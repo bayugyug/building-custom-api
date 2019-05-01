@@ -2,6 +2,7 @@ BUILD_DATE := $(shell date +%Y-%m-%dT%H:%M:%S%z)
 BUILD_TIME := $(shell date +%Y%m%d.%H%M%S)
 BUILD_HASH := $(shell git log -1 2>/dev/null| head -n 1 | cut -d ' ' -f 2)
 BUILD_NAME := building-custom-api
+TEST_FILES := $(shell go list ./... | grep -v /vendor/)
 
 all: build
 
@@ -11,17 +12,17 @@ build :
 
 test : build
 	go test ./... > testrun.txt
-	golint > lint.txt
-	go vet -v ./... > vet.txt
+	golint  $(TEST_FILES) > lint.txt
+	go vet -v $(TEST_FILES) > vet.txt
 	gocov test github.com/bayugyug/building-custom-api | gocov-xml > coverage.xml
-	go test $( shell go list ./... | grep -v /vendor/) -bench=. -test.benchmem -v 2>/dev/null | gobench2plot > benchmarks.xml
+	go test $(TEST_FILES) -bench=. -test.benchmem -v 2>/dev/null | gobench2plot > benchmarks.xml
 	ginkgo -v  ./... > gink.txt
 
 testginkgo : build
 	ginkgo -v  ./...
 
 testrun : clean test
-	time go test -v -bench=. -benchmem -dummy >> testrun.txt 2>&1
+	time go test -v -bench=. -benchmem -dummy > testrun.txt 2>&1
 
 prepare : build
 

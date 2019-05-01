@@ -8,13 +8,15 @@ import (
 	"time"
 )
 
-type HttpCurl struct {
-	HttpClient *http.Client
+// HTTPCurl helpers for http requests
+type HTTPCurl struct {
+	HTTPClient *http.Client
 	Timeout    time.Duration
 }
 
-func NewHttpCurl() *HttpCurl {
-	h := &HttpCurl{
+// NewHTTPCurl new http helper object
+func NewHTTPCurl() *HTTPCurl {
+	h := &HTTPCurl{
 		Timeout: time.Duration(30),
 	}
 	h.Init()
@@ -22,10 +24,10 @@ func NewHttpCurl() *HttpCurl {
 
 }
 
-//Init start prep
-func (g *HttpCurl) Init() {
+// Init start prep
+func (g *HTTPCurl) Init() {
 	//web
-	g.HttpClient = &http.Client{
+	g.HTTPClient = &http.Client{
 		Timeout: time.Duration(g.Timeout * time.Second),
 		Transport: &http.Transport{
 			Dial: (&net.Dialer{
@@ -37,8 +39,8 @@ func (g *HttpCurl) Init() {
 	}
 }
 
-//Get request via get
-func (g *HttpCurl) Get(url string) (string, int, error) {
+// Get request via get
+func (g *HTTPCurl) Get(url string) (string, int, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return "", -1, err
@@ -46,7 +48,7 @@ func (g *HttpCurl) Get(url string) (string, int, error) {
 	//settings
 	req.Close = true
 	req.Header.Set("Connection", "close")
-	resp, err := g.HttpClient.Do(req)
+	resp, err := g.HTTPClient.Do(req)
 	if err != nil {
 		if resp != nil {
 			resp.Body.Close()
