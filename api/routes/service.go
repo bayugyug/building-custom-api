@@ -12,7 +12,6 @@ import (
 
 	"github.com/bayugyug/building-custom-api/api/handler"
 	"github.com/bayugyug/building-custom-api/configs"
-	"github.com/bayugyug/building-custom-api/drivers"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -29,7 +28,7 @@ const (
 // APIService the svc map
 type APIService struct {
 	Building *handler.Building
-	Router   *chi.Mux
+	Mux      *chi.Mux
 	Address  string
 }
 
@@ -53,11 +52,8 @@ func NewAPIService(opts ...*configs.Option) (*APIService, error) {
 
 	//default
 	svc := &APIService{
-		Address: ":8989",
-		Building: &handler.Building{
-			Storage: drivers.NewStorage(),
-			Context: context.Background(),
-		},
+		Address:  ":8989",
+		Building: handler.NewBuilding(),
 	}
 
 	//add options if any
@@ -72,22 +68,22 @@ func NewAPIService(opts ...*configs.Option) (*APIService, error) {
 	} //iterate all opts
 
 	//set the actual router
-	svc.Router = svc.MapRoute()
+	svc.Mux = svc.MapRoute()
 
 	//good :-)
 	return svc, nil
 }
 
-//Run run the http server based on settings
+// Run the http server based on settings
 func (svc *APIService) Run() {
 
 	//gracious timing
 	srv := &http.Server{
 		Addr:         svc.Address,
-		Handler:      svc.Router,
-		ReadTimeout:  60 * time.Second,
-		WriteTimeout: 60 * time.Second,
-		IdleTimeout:  60 * time.Second,
+		Handler:      svc.Mux,
+		ReadTimeout:  30 * time.Second,
+		WriteTimeout: 30 * time.Second,
+		IdleTimeout:  30 * time.Second,
 	}
 
 	//async run
@@ -112,7 +108,7 @@ func (svc *APIService) Run() {
 	log.Println("Server gracefully stopped!")
 }
 
-//MapRoute route map all endpoints
+// MapRoute route map all endpoints
 func (svc *APIService) MapRoute() *chi.Mux {
 
 	// Multiplexer
@@ -179,22 +175,4 @@ func (svc *APIService) MapRoute() *chi.Mux {
 		fmt.Printf("Logging err: %s\n", err.Error())
 	}
 	return router
-}
-
-//SetContextKeyVal version context
-func (svc *APIService) SetContextKeyVal(k *serviceContextKey, v interface{}) func(next http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			r = r.WithContext(context.WithValue(r.Context(), k, v))
-			next.ServeHTTP(w, r)
-		})
-	}
-}
-
-type serviceContextKey struct {
-	name string
-}
-
-func (k *serviceContextKey) String() string {
-	return k.name
 }

@@ -35,6 +35,14 @@ type Building struct {
 	Storage *drivers.Storage
 }
 
+// NewBuilding new instance
+func NewBuilding() *Building {
+	return &Building{
+		Storage: drivers.NewStorage(),
+		Context: context.Background(),
+	}
+}
+
 // Welcome index page
 func (b *Building) Welcome(w http.ResponseWriter, r *http.Request) {
 	//good
