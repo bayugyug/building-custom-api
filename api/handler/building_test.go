@@ -19,7 +19,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("REST Building API Service", func() {
+var _ = Describe("REST Building API Service::HANDLERS", func() {
 	//init
 	service, _ := routes.NewAPIService(
 		routes.WithSvcOptAddress(":8989"),

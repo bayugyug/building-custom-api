@@ -12,7 +12,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("REST Building API Service", func() {
+var _ = Describe("REST Building API Service::MODELS", func() {
 
 	//init
 	var ctx context.Context
