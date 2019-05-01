@@ -5,12 +5,12 @@ import (
 	"log"
 )
 
-// ShowMeLog flag to switch verbose
-var ShowMeLog = true
+// Verbose flag to switch verbose
+var Verbose = true
 
 // Dumper verbose logs
 func Dumper(infos ...interface{}) {
-	if ShowMeLog {
+	if Verbose {
 		j, _ := json.MarshalIndent(infos, "", "\t")
 		log.Println(string(j))
 	}

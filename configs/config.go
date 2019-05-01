@@ -21,7 +21,7 @@ var (
 // ParameterConfig optional parameter structure
 type ParameterConfig struct {
 	Port    string `json:"port"`
-	Showlog bool   `json:"showlog"`
+	Verbose bool   `json:"showlog"`
 }
 
 // APISettings is a config mapping
@@ -108,7 +108,7 @@ func (g *APISettings) Initializer() {
 		return
 	}
 	//set dump flag
-	tools.ShowMeLog = g.Config.Showlog
+	tools.Verbose = g.Config.Verbose
 
 }
 
