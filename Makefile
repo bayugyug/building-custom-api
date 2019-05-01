@@ -10,12 +10,12 @@ build :
 	CGO_ENABLED=0 GOOS=linux go build -o $(BUILD_NAME) -a -tags netgo -installsuffix netgo -installsuffix cgo -v -ldflags "-X main.BuildTime=$(BUILD_TIME) " .
 
 test : build
-	go test $(go list ./... | grep -v /vendor/) > testrun.txt
+	go test ./... > testrun.txt
 	golint > lint.txt
 	go vet -v ./... > vet.txt
 	gocov test github.com/bayugyug/building-custom-api | gocov-xml > coverage.xml
-	go test $(go list ./... | grep -v /vendor/) -bench=. -test.benchmem -v 2>/dev/null | gobench2plot > benchmarks.xml
-	ginkgo -v  ./...
+	go test $( shell go list ./... | grep -v /vendor/) -bench=. -test.benchmem -v 2>/dev/null | gobench2plot > benchmarks.xml
+	ginkgo -v  ./... > gink.txt
 
 testginkgo : build
 	ginkgo -v  ./...
@@ -27,7 +27,7 @@ prepare : build
 
 clean:
 	rm -f $(BUILD_NAME)
-	rm -f benchmarks.xml coverage.xml vet.txt lint.txt testrun.txt
+	rm -f benchmarks.xml coverage.xml vet.txt lint.txt testrun.txt gink.txt
 
 re: clean all
 

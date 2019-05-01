@@ -6,7 +6,7 @@
 
 
 
-### Pre-Requisite / Devt dependencies
+### Pre-Requisite / Development dependencies
 - Dependencies manager: Dep - https://github.com/golang/dep
 - Testing framework: ginkgo - https://github.com/onsi/ginkgo
 
@@ -74,7 +74,6 @@
 	[x] Fields:
 	
 		- port      = port to run the http server (default: 8989)
-		- showlog   = flag for dev't log on std-out
 		
 	[x] Sanity check either of the 2 choices below
 	    
@@ -86,7 +85,7 @@
 
 ```sh
 
-	./building-custom-api --config '{"port":"8989","showlog":true}'
+	./building-custom-api --config '{"port":"8989"}'
 
 ```
 
