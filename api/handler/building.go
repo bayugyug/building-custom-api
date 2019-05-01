@@ -26,6 +26,7 @@ type APIEndpoints interface {
 type Response struct {
 	Status string      `json:"status"`
 	Result interface{} `json:"result,omitempty"`
+	Total  int         `json:"total,omitempty"`
 }
 
 // Building the api handler
@@ -123,6 +124,7 @@ func (b *Building) BuildingGet(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, Response{
 		Status: "Success",
 		Result: rows,
+		Total:  len(rows),
 	})
 }
 
