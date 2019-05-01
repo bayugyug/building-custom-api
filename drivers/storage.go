@@ -25,23 +25,23 @@ func NewStorage() *Storage {
 }
 
 // Set new row
-func (q *Storage) Set(storekey string, data interface{}) string {
+func (q *Storage) Set(key string, data interface{}) string {
 	// ensure
 	q.Lock.Lock()
 	defer q.Lock.Unlock()
-	q.Store[storekey] = data
-	return storekey
+	q.Store[key] = data
+	return key
 }
 
 // Delete an old record
-func (q *Storage) Delete(storekey string) error {
+func (q *Storage) Delete(key string) error {
 	// ensure
 	q.Lock.Lock()
 	defer q.Lock.Unlock()
 
-	if _, oks := q.Store[storekey]; oks {
+	if _, oks := q.Store[key]; oks {
 		//delete
-		delete(q.Store, storekey)
+		delete(q.Store, key)
 		return nil
 	}
 	//give it back ;-)
@@ -49,12 +49,12 @@ func (q *Storage) Delete(storekey string) error {
 }
 
 // GetOne 1 record
-func (q *Storage) GetOne(storekey string) (interface{}, error) {
+func (q *Storage) GetOne(key string) (interface{}, error) {
 	// ensure
 	q.Lock.Lock()
 	defer q.Lock.Unlock()
 
-	data, oks := q.Store[storekey]
+	data, oks := q.Store[key]
 	if !oks {
 		return nil, ErrRecordNotFound
 	}
@@ -77,11 +77,11 @@ func (q *Storage) GetAll() ([]interface{}, error) {
 }
 
 // Exists check the record
-func (q *Storage) Exists(storekey string) (interface{}, bool) {
+func (q *Storage) Exists(key string) (interface{}, bool) {
 	// ensure
 	q.Lock.Lock()
 	defer q.Lock.Unlock()
-	row, oks := q.Store[storekey]
+	row, oks := q.Store[key]
 	//give it back ;-)
 	return row, oks
 }

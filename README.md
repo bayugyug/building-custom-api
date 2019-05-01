@@ -67,16 +67,16 @@
 ```
 
 
-### Mini-How-To on running the api binary
+### Run
 
 - The api can accept a json format configuration
 	- Fields:
 		- port      = port to run the http server (default: 8989)
 
 - Sanity check
-
-	- ginkgo ./...	
-	- make test
+	- Either:
+		- ginkgo ./...	
+		- make test
 
 - Run from the console
 
