@@ -8,7 +8,7 @@ import (
 
 // BuildingDeleteParams delete parameter
 type BuildingDeleteParams struct {
-	ID string `json:"ID,required"`
+	ID string `json:"id"`
 }
 
 // NewBuildingDelete data remover

@@ -7,6 +7,7 @@ import (
 	"github.com/bayugyug/building-custom-api/drivers"
 	"github.com/bayugyug/building-custom-api/models"
 	"github.com/bayugyug/building-custom-api/tools"
+	"github.com/icrowley/fake"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -26,8 +27,9 @@ var _ = Describe("REST Building API Service", func() {
 
 		Context("Create record", func() {
 			It("should return ok", func() {
+				nameReqd := fmt.Sprintf("building::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
-					Name:    "test building name",
+					Name:    &nameReqd,
 					Address: "address of the building name",
 					Floors:  []string{"floor-a", "floor-b", "floor-c"},
 				}
@@ -43,8 +45,9 @@ var _ = Describe("REST Building API Service", func() {
 
 		Context("Update record", func() {
 			It("should return ok", func() {
+				nameReqd := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
-					Name:    "marina-bay-sands",
+					Name:    &nameReqd,
 					Address: "Marina Boulevard",
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
@@ -56,9 +59,9 @@ var _ = Describe("REST Building API Service", func() {
 				By("Create data before update ok")
 
 				uparams := &models.BuildingUpdateParams{
-					ID: pid,
+					ID: &pid,
 					BuildingCreateParams: models.BuildingCreateParams{
-						Name:    "marina-bay-sands",
+						Name:    &nameReqd,
 						Address: "Marina Boulevard",
 						Floors:  tools.Seeder{}.CreateFloors(),
 					},
@@ -74,8 +77,9 @@ var _ = Describe("REST Building API Service", func() {
 
 		Context("Delete record", func() {
 			It("should return ok", func() {
+				nameReqd := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
-					Name:    "marina-bay-sands-1",
+					Name:    &nameReqd,
 					Address: "Marina Boulevard-1",
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
@@ -97,8 +101,9 @@ var _ = Describe("REST Building API Service", func() {
 
 		Context("Get 1 record", func() {
 			It("should return ok", func() {
+				nameReqd := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
-					Name:    "marina-bay-sands-2",
+					Name:    &nameReqd,
 					Address: "Marina Boulevard-2",
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
@@ -123,8 +128,9 @@ var _ = Describe("REST Building API Service", func() {
 			It("should return ok", func() {
 
 				for i := 1; i <= 5; i++ {
+					nameReqd := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 					params := &models.BuildingCreateParams{
-						Name:    fmt.Sprintf("marina-bay-sands-%05d", i),
+						Name:    &nameReqd,
 						Address: fmt.Sprintf("Marina Boulevard-%05d", i),
 						Floors:  tools.Seeder{}.CreateFloors(),
 					}
@@ -173,8 +179,9 @@ var _ = Describe("REST Building API Service", func() {
 
 		Context("Update record with missing parameter id", func() {
 			It("should error", func() {
+				nameReqd := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
-					Name:    "marina-bay-sands",
+					Name:    &nameReqd,
 					Address: "Marina Boulevard",
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
@@ -185,11 +192,11 @@ var _ = Describe("REST Building API Service", func() {
 				}
 				Expect(len(pid)).Should(BeNumerically(">", 0))
 				By("Create data before update ok")
-
+				pidReqd := fmt.Sprintf("%s::invalid", pid)
 				uparams := &models.BuildingUpdateParams{
-					ID: pid + "::invalid",
+					ID: &pidReqd,
 					BuildingCreateParams: models.BuildingCreateParams{
-						Name:    "marina-bay-sands",
+						Name:    &nameReqd,
 						Address: "Marina Boulevard",
 						Floors:  tools.Seeder{}.CreateFloors(),
 					},
@@ -203,8 +210,9 @@ var _ = Describe("REST Building API Service", func() {
 
 		Context("Delete record with missing parameter id", func() {
 			It("should error", func() {
+				nameReqd := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
-					Name:    "marina-bay-sands-1a",
+					Name:    &nameReqd,
 					Address: "Marina Boulevard-1a",
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}

@@ -8,7 +8,7 @@ import (
 
 // BuildingGetOneParams delete parameter
 type BuildingGetOneParams struct {
-	ID string `json:"ID"`
+	ID string `json:"id"`
 }
 
 // NewBuildingGetOne data remover

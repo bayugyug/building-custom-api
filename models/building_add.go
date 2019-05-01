@@ -27,15 +27,14 @@ var (
 
 // BuildingCreateParams create parameter
 type BuildingCreateParams struct {
-	Name    string   `json:"name,required"`
-	Address string   `json:"address,required"`
-	Floors  []string `json:"floors,required"`
+	Name    *string  `json:"name"`
+	Address string   `json:"address"`
+	Floors  []string `json:"floors"`
 }
 
 // NewBuildingCreate new creator
 func NewBuildingCreate() *BuildingCreateParams {
 	return &BuildingCreateParams{}
-
 }
 
 // Bind filter parameter
@@ -44,7 +43,6 @@ func (p *BuildingCreateParams) Bind(r *http.Request) error {
 	if p == nil {
 		return ErrMissingRequiredParameters
 	}
-	p.Name = strings.TrimSpace(p.Name)
 	p.Address = strings.TrimSpace(p.Address)
 	//check
 	if !p.SanityCheck() {
@@ -56,8 +54,7 @@ func (p *BuildingCreateParams) Bind(r *http.Request) error {
 
 // SanityCheck filter required parameter
 func (p *BuildingCreateParams) SanityCheck() bool {
-	if p.Name == "" || p.Address == "" ||
-		len(p.Floors) == 0 {
+	if p.Name == nil || *p.Name == "" {
 		return false
 	}
 	return true
@@ -70,14 +67,14 @@ func (p *BuildingCreateParams) Create(ctx context.Context, store *drivers.Storag
 		return "", ErrMissingRequiredParameters
 	}
 	record := NewBuildingData()
-	pid := record.HashKey(p.Name)
+	pid := record.HashKey(*p.Name)
 	if _, oks := store.Exists(pid); oks {
 		return "", ErrRecordExists
 	}
 	//set row
 	record.ID = pid
 	record.Created = time.Now().Format(time.RFC3339)
-	record.Name = p.Name
+	record.Name = *p.Name
 	record.Address = p.Address
 	record.Floors = p.Floors
 	gid := store.Set(pid, record)

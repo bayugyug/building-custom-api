@@ -11,7 +11,7 @@ import (
 
 // BuildingUpdateParams update parameter
 type BuildingUpdateParams struct {
-	ID string `json:"id,required"`
+	ID *string `json:"id"`
 	BuildingCreateParams
 }
 
@@ -26,10 +26,9 @@ func (p *BuildingUpdateParams) Bind(r *http.Request) error {
 	if p == nil {
 		return ErrMissingRequiredParameters
 	}
-	//check
-	p.ID = strings.TrimSpace(p.ID)
-	p.Name = strings.TrimSpace(p.Name)
+	//fmt
 	p.Address = strings.TrimSpace(p.Address)
+	//chk
 	if !p.SanityCheck() {
 		return ErrMissingRequiredParameters
 	}
@@ -39,8 +38,8 @@ func (p *BuildingUpdateParams) Bind(r *http.Request) error {
 
 // SanityCheck filter required parameter
 func (p *BuildingUpdateParams) SanityCheck() bool {
-	if p.Name == "" || p.Address == "" ||
-		len(p.Floors) == 0 || p.ID == "" {
+	if p.ID == nil || p.Name == nil ||
+		*p.ID == "" || *p.Name == "" {
 		return false
 	}
 	return true
@@ -53,14 +52,14 @@ func (p *BuildingUpdateParams) Update(ctx context.Context, store *drivers.Storag
 		return ErrMissingRequiredParameters
 	}
 	//db check
-	row, oks := store.Exists(p.ID)
+	row, oks := store.Exists(*p.ID)
 	if !oks {
 		return ErrRecordNotFound
 	}
 	//check the hashkey
 	record := NewBuildingData()
-	pid := record.HashKey(p.Name)
-	if pid != p.ID {
+	pid := record.HashKey(*p.Name)
+	if pid != *p.ID {
 		return ErrRecordMismatch
 	}
 	//convert db data
@@ -70,7 +69,7 @@ func (p *BuildingUpdateParams) Update(ctx context.Context, store *drivers.Storag
 	}
 	//set row
 	record = vrow
-	record.Name = p.Name
+	record.Name = *p.Name
 	record.Address = p.Address
 	record.Floors = p.Floors
 	record.Modified = time.Now().Format(time.RFC3339)

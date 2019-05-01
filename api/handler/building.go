@@ -130,7 +130,7 @@ func (b *Building) BuildingGet(w http.ResponseWriter, r *http.Request) {
 func (b *Building) BuildingGetOne(w http.ResponseWriter, r *http.Request) {
 	data := models.NewBuildingGetOne(strings.TrimSpace(chi.URLParam(r, "id")))
 	//chk
-	if len(data.ID) == 0 {
+	if data.ID == "" {
 		//206
 		b.ReplyErrContent(w, r, http.StatusPartialContent, http.StatusText(http.StatusPartialContent))
 		return
