@@ -170,7 +170,7 @@ var _ = Describe("REST Building API Service", func() {
 
 	Context("Invalid parameters", func() {
 
-		Context("Create record", func() {
+		Context("Create with empty name parameter", func() {
 			It("should not create", func() {
 				formdata = tools.Seeder{}.CreateWithEmptyName()
 				requestBody := bytes.NewReader([]byte(formdata))
@@ -220,7 +220,7 @@ var _ = Describe("REST Building API Service", func() {
 			})
 		})
 
-		Context("Try Get 1 record, no id parameter", func() {
+		Context("Get 1 record with missing ID", func() {
 			It("should not return data", func() {
 				w, body := testReq(router, "GET", "/v1/api/building/no-id", nil)
 				var response handler.Response
@@ -310,7 +310,7 @@ var _ = Describe("REST Building API Service", func() {
 			})
 		})
 
-		Context("Delete a not existsing record", func() {
+		Context("Delete not existing record", func() {
 			It("should return ok", func() {
 				formdata = tools.Seeder{}.Create()
 				requestBody := bytes.NewReader([]byte(formdata))

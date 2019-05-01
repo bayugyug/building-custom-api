@@ -11,7 +11,7 @@ build :
 	CGO_ENABLED=0 GOOS=linux go build -o $(BUILD_NAME) -a -tags netgo -installsuffix netgo -installsuffix cgo -v -ldflags "-X main.BuildTime=$(BUILD_TIME) " .
 
 test : build
-	go test ./... > testrun.txt
+	go test -v ./... > testrun.txt
 	golint  $(TEST_FILES) > lint.txt
 	go vet -v $(TEST_FILES) > vet.txt
 	gocov test github.com/bayugyug/building-custom-api | gocov-xml > coverage.xml
