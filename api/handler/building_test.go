@@ -49,7 +49,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusCreated))
-				Expect(response.Code).To(Equal(http.StatusCreated))
 				By("Create data ok")
 			})
 		})
@@ -65,7 +64,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusCreated))
-				Expect(response.Code).To(Equal(http.StatusCreated))
 				By("Add before update data ok")
 				//update it
 				pid, _ := response.Result.(string)
@@ -77,7 +75,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w2.Code).To(Equal(http.StatusOK))
-				Expect(response2.Code).To(Equal(http.StatusOK))
 				By("Update data ok")
 			})
 		})
@@ -95,7 +92,6 @@ var _ = Describe("REST Building API Service", func() {
 						Fail(err.Error())
 					}
 					Expect(w.Code).To(Equal(http.StatusCreated))
-					Expect(response.Code).To(Equal(http.StatusCreated))
 					By("Add 1x1 data ok")
 				}
 
@@ -106,7 +102,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w2.Code).To(Equal(http.StatusOK))
-				Expect(response2.Code).To(Equal(http.StatusOK))
 				By("Get more data ok")
 			})
 		})
@@ -121,7 +116,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusCreated))
-				Expect(response.Code).To(Equal(http.StatusCreated))
 				By("Add record before get 1 data ok")
 
 				pid, _ := response.Result.(string)
@@ -131,7 +125,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w2.Code).To(Equal(http.StatusOK))
-				Expect(response2.Code).To(Equal(http.StatusOK))
 				By("Get 1 data ok")
 			})
 		})
@@ -146,7 +139,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusCreated))
-				Expect(response.Code).To(Equal(http.StatusCreated))
 				By("Add before remove data ok")
 
 				pid, _ := response.Result.(string)
@@ -156,7 +148,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w2.Code).To(Equal(http.StatusOK))
-				Expect(response2.Code).To(Equal(http.StatusOK))
 				By("Remove data ok")
 			})
 		})
@@ -174,7 +165,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusPartialContent))
-				Expect(response.Code).To(Equal(http.StatusPartialContent))
 				By("Create data not done")
 			})
 		})
@@ -189,7 +179,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusCreated))
-				Expect(response.Code).To(Equal(http.StatusCreated))
 				By("Add before duplicate ok")
 				//do it again
 				w2, body2 := testReq(router, "POST", "/v1/api/building", bytes.NewReader([]byte(formdata)))
@@ -198,7 +187,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w2.Code).To(Equal(http.StatusConflict))
-				Expect(response2.Code).To(Equal(http.StatusConflict))
 				By("Duplicate data not allowed")
 			})
 		})
@@ -213,7 +201,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusPartialContent))
-				Expect(response.Code).To(Equal(http.StatusPartialContent))
 				By("Create data not done")
 			})
 		})
@@ -226,7 +213,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusNotFound))
-				Expect(response.Code).To(Equal(http.StatusNotFound))
 				By("Get data not found")
 			})
 		})
@@ -242,7 +228,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusCreated))
-				Expect(response.Code).To(Equal(http.StatusCreated))
 				By("Add before update data ok")
 				//update it
 				pid, _ := response.Result.(string)
@@ -254,7 +239,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w2.Code).To(Equal(http.StatusNotFound))
-				Expect(response2.Code).To(Equal(http.StatusNotFound))
 				By("Update data did not continue")
 			})
 		})
@@ -270,7 +254,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusCreated))
-				Expect(response.Code).To(Equal(http.StatusCreated))
 				By("Add before update data ok")
 				//update it
 				pid, _ := response.Result.(string)
@@ -282,7 +265,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w2.Code).To(Equal(http.StatusConflict))
-				Expect(response2.Code).To(Equal(http.StatusConflict))
 				By("Update data did not continue")
 			})
 		})
@@ -298,7 +280,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusCreated))
-				Expect(response.Code).To(Equal(http.StatusCreated))
 				By("Add before update data ok")
 				//update it
 				pid, _ := response.Result.(string)
@@ -310,7 +291,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w2.Code).To(Equal(http.StatusPartialContent))
-				Expect(response2.Code).To(Equal(http.StatusPartialContent))
 				By("Update data did not continue")
 			})
 		})
@@ -325,7 +305,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w.Code).To(Equal(http.StatusCreated))
-				Expect(response.Code).To(Equal(http.StatusCreated))
 				By("Add before remove data ok")
 
 				pid, _ := response.Result.(string)
@@ -335,7 +314,6 @@ var _ = Describe("REST Building API Service", func() {
 					Fail(err.Error())
 				}
 				Expect(w2.Code).To(Equal(http.StatusNotFound))
-				Expect(response2.Code).To(Equal(http.StatusNotFound))
 				By("Remove data did not continue")
 			})
 		})

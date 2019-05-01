@@ -4,9 +4,11 @@ import (
 	"context"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/bayugyug/building-custom-api/drivers"
 	"github.com/bayugyug/building-custom-api/models"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 )
@@ -22,7 +24,6 @@ type APIEndpoints interface {
 
 // Response is the reply object
 type Response struct {
-	Code   int         `json:"code,omitempty"`
 	Status string      `json:"status,omitempty"`
 	Result interface{} `json:"result,omitempty"`
 }
@@ -37,7 +38,6 @@ type Building struct {
 func (b *Building) Welcome(w http.ResponseWriter, r *http.Request) {
 	//good
 	render.JSON(w, r, Response{
-		Code:   200,
 		Status: "Welcome!",
 	})
 }
@@ -70,7 +70,6 @@ func (b *Building) BuildCreate(w http.ResponseWriter, r *http.Request) {
 	//good
 	render.Status(r, http.StatusCreated)
 	render.JSON(w, r, Response{
-		Code:   http.StatusCreated,
 		Status: "Success",
 		Result: pid,
 	})
@@ -105,7 +104,6 @@ func (b *Building) BuildingUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 	//good
 	render.JSON(w, r, Response{
-		Code:   200,
 		Status: "Success",
 	})
 }
@@ -123,7 +121,6 @@ func (b *Building) BuildingGet(w http.ResponseWriter, r *http.Request) {
 	}
 	//good
 	render.JSON(w, r, Response{
-		Code:   200,
 		Status: "Success",
 		Result: rows,
 	})
@@ -148,7 +145,6 @@ func (b *Building) BuildingGetOne(w http.ResponseWriter, r *http.Request) {
 	}
 	//good
 	render.JSON(w, r, Response{
-		Code:   200,
 		Status: "Success",
 		Result: row,
 	})
@@ -177,7 +173,6 @@ func (b *Building) BuildingDelete(w http.ResponseWriter, r *http.Request) {
 	}
 	//good
 	render.JSON(w, r, Response{
-		Code:   200,
 		Status: "Success",
 	})
 }
@@ -186,7 +181,14 @@ func (b *Building) BuildingDelete(w http.ResponseWriter, r *http.Request) {
 func (b *Building) ReplyErrContent(w http.ResponseWriter, r *http.Request, code int, msg string) {
 	render.Status(r, code)
 	render.JSON(w, r, Response{
-		Code:   code,
 		Status: msg,
+	})
+}
+
+// HealthCheck index page
+func (b *Building) HealthCheck(w http.ResponseWriter, r *http.Request) {
+	//good
+	render.JSON(w, r, Response{
+		Status: "Building API Service: " + time.Now().Format(time.RFC3339),
 	})
 }

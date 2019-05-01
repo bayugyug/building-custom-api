@@ -162,6 +162,7 @@ func (svc *APIService) MapRoute() *chi.Mux {
 		r.Mount("/api",
 			func(API *handler.Building) *chi.Mux {
 				sr := chi.NewRouter()
+				sr.Get("/health", svc.API.HealthCheck)
 				sr.Post("/building", API.BuildCreate)
 				sr.Put("/building", API.BuildingUpdate)
 				sr.Patch("/building", API.BuildingUpdate)
