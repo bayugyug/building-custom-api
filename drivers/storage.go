@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	// ErrRecordNotFound not exists
+	// ErrRecordNotFound not found record
 	ErrRecordNotFound = errors.New("record not found")
 )
 

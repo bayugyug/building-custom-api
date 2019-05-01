@@ -15,7 +15,7 @@ type BuildingUpdateParams struct {
 	BuildingCreateParams
 }
 
-// NewBuildingUpdate new creator
+// NewBuildingUpdate new instance
 func NewBuildingUpdate() *BuildingUpdateParams {
 	return &BuildingUpdateParams{}
 }

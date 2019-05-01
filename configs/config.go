@@ -97,7 +97,6 @@ func (g *APISettings) Initializer() {
 	if g.CmdParams == "" {
 		g.CmdParams = `{"port":"8989"}`
 	}
-	log.Println("CmdParams:", g.CmdParams)
 
 	//try to reconfigure if there is passed params, otherwise use show err
 	if g.CmdParams != "" {

@@ -11,7 +11,7 @@ type BuildingDeleteParams struct {
 	ID string `json:"id"`
 }
 
-// NewBuildingDelete data remover
+// NewBuildingDelete new instance
 func NewBuildingDelete(pid string) *BuildingDeleteParams {
 	return &BuildingDeleteParams{ID: pid}
 }

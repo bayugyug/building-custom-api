@@ -31,7 +31,7 @@ type BuildingData struct {
 	Modified string   `json:"modified,omitempty"`
 }
 
-// NewBuildingData new storage object
+// NewBuildingData new instance
 func NewBuildingData() *BuildingData {
 	return &BuildingData{}
 }

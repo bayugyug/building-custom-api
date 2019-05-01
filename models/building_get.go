@@ -6,12 +6,12 @@ import (
 	"github.com/bayugyug/building-custom-api/drivers"
 )
 
-// BuildingGetParams delete parameter
+// BuildingGetParams get parameter
 type BuildingGetParams struct {
 	ID string `json:"id"`
 }
 
-// NewBuildingGetOne data remover
+// NewBuildingGetOne new instance with parameter
 func NewBuildingGetOne(id string) *BuildingGetParams {
 	return &BuildingGetParams{ID: id}
 }
