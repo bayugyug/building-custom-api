@@ -24,7 +24,7 @@ type APIEndpoints interface {
 
 // Response is the reply object
 type Response struct {
-	Status string      `json:"status,omitempty"`
+	Status string      `json:"status"`
 	Result interface{} `json:"result,omitempty"`
 }
 
@@ -110,7 +110,7 @@ func (b *Building) BuildingUpdate(w http.ResponseWriter, r *http.Request) {
 
 // BuildingGet list all
 func (b *Building) BuildingGet(w http.ResponseWriter, r *http.Request) {
-	data := &models.BuildingGetOneParams{}
+	data := &models.BuildingGetParams{}
 	//check
 	rows, err := data.GetAll(b.Context, b.Storage)
 	//chk

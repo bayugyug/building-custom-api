@@ -151,6 +151,21 @@ var _ = Describe("REST Building API Service", func() {
 				By("Remove data ok")
 			})
 		})
+
+		Context("Create record with minimum parameter", func() {
+			It("should return ok", func() {
+				formdata = tools.Seeder{}.CreateMin()
+				requestBody := bytes.NewReader([]byte(formdata))
+				w, body := testReq(router, "POST", "/v1/api/building", requestBody)
+				var response handler.Response
+				if err := json.Unmarshal(body, &response); err != nil {
+					Fail(err.Error())
+				}
+				Expect(w.Code).To(Equal(http.StatusCreated))
+				By("Create data ok")
+			})
+		})
+
 	}) // valid params
 
 	Context("Invalid parameters", func() {
@@ -320,7 +335,7 @@ var _ = Describe("REST Building API Service", func() {
 	}) // invalid params
 })
 
-// testReq
+// testReq dummy recorder for http
 func testReq(router *chi.Mux, method, path string, body io.Reader) (*httptest.ResponseRecorder, []byte) {
 
 	req, err := http.NewRequest(method, path, body)

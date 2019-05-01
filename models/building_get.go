@@ -6,18 +6,18 @@ import (
 	"github.com/bayugyug/building-custom-api/drivers"
 )
 
-// BuildingGetOneParams delete parameter
-type BuildingGetOneParams struct {
+// BuildingGetParams delete parameter
+type BuildingGetParams struct {
 	ID string `json:"id"`
 }
 
 // NewBuildingGetOne data remover
-func NewBuildingGetOne(id string) *BuildingGetOneParams {
-	return &BuildingGetOneParams{ID: id}
+func NewBuildingGetOne(id string) *BuildingGetParams {
+	return &BuildingGetParams{ID: id}
 }
 
 // Get query from the store base on id
-func (p *BuildingGetOneParams) Get(ctx context.Context, store *drivers.Storage) (*BuildingData, error) {
+func (p *BuildingGetParams) Get(ctx context.Context, store *drivers.Storage) (*BuildingData, error) {
 	data, err := store.GetOne(p.ID)
 	if err != nil {
 		return nil, err
@@ -32,7 +32,7 @@ func (p *BuildingGetOneParams) Get(ctx context.Context, store *drivers.Storage) 
 }
 
 // GetAll query from the store base on id
-func (p *BuildingGetOneParams) GetAll(ctx context.Context, store *drivers.Storage) ([]*BuildingData, error) {
+func (p *BuildingGetParams) GetAll(ctx context.Context, store *drivers.Storage) ([]*BuildingData, error) {
 	data, err := store.GetAll()
 	if err != nil {
 		return nil, err

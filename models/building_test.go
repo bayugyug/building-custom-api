@@ -27,9 +27,9 @@ var _ = Describe("REST Building API Service", func() {
 
 		Context("Create record", func() {
 			It("should return ok", func() {
-				nameReqd := fmt.Sprintf("building::%s", fake.DigitsN(15))
+				name := fmt.Sprintf("building::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
-					Name:    &nameReqd,
+					Name:    &name,
 					Address: "address of the building name",
 					Floors:  []string{"floor-a", "floor-b", "floor-c"},
 				}
@@ -45,9 +45,9 @@ var _ = Describe("REST Building API Service", func() {
 
 		Context("Update record", func() {
 			It("should return ok", func() {
-				nameReqd := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
+				name := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
-					Name:    &nameReqd,
+					Name:    &name,
 					Address: "Marina Boulevard",
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
@@ -61,7 +61,7 @@ var _ = Describe("REST Building API Service", func() {
 				uparams := &models.BuildingUpdateParams{
 					ID: &pid,
 					BuildingCreateParams: models.BuildingCreateParams{
-						Name:    &nameReqd,
+						Name:    &name,
 						Address: "Marina Boulevard",
 						Floors:  tools.Seeder{}.CreateFloors(),
 					},
@@ -77,9 +77,9 @@ var _ = Describe("REST Building API Service", func() {
 
 		Context("Delete record", func() {
 			It("should return ok", func() {
-				nameReqd := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
+				name := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
-					Name:    &nameReqd,
+					Name:    &name,
 					Address: "Marina Boulevard-1",
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
@@ -101,9 +101,9 @@ var _ = Describe("REST Building API Service", func() {
 
 		Context("Get 1 record", func() {
 			It("should return ok", func() {
-				nameReqd := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
+				name := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
-					Name:    &nameReqd,
+					Name:    &name,
 					Address: "Marina Boulevard-2",
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
@@ -128,9 +128,9 @@ var _ = Describe("REST Building API Service", func() {
 			It("should return ok", func() {
 
 				for i := 1; i <= 5; i++ {
-					nameReqd := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
+					name := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 					params := &models.BuildingCreateParams{
-						Name:    &nameReqd,
+						Name:    &name,
 						Address: fmt.Sprintf("Marina Boulevard-%05d", i),
 						Floors:  tools.Seeder{}.CreateFloors(),
 					}
@@ -141,7 +141,7 @@ var _ = Describe("REST Building API Service", func() {
 					Expect(len(pid)).Should(BeNumerically(">", 0))
 					By("Create data before get list ok")
 				}
-				uparams := &models.BuildingGetOneParams{}
+				uparams := &models.BuildingGetParams{}
 				rows, err := uparams.GetAll(ctx, store)
 				if err != nil {
 					Fail(err.Error())
@@ -151,13 +151,29 @@ var _ = Describe("REST Building API Service", func() {
 			})
 		})
 
+		Context("Create record with minimum parameter", func() {
+			It("should return ok", func() {
+				name := fmt.Sprintf("building::%s", fake.DigitsN(15))
+				params := &models.BuildingCreateParams{
+					Name: &name,
+				}
+				pid, err := params.Create(ctx, store)
+				if err != nil {
+					Fail(err.Error())
+				}
+				Expect(len(pid)).Should(BeNumerically(">", 0))
+				By("Create data ok")
+
+			})
+		})
+
 	}) // valid
 
 	Context("Invalid parameters", func() {
 
 		Context("Get list of records with empty list", func() {
 			It("should error", func() {
-				uparams := &models.BuildingGetOneParams{}
+				uparams := &models.BuildingGetParams{}
 				rows, err := uparams.GetAll(ctx, store)
 				Expect(err).To(HaveOccurred())
 				Expect(len(rows)).To(Equal(0))
@@ -179,9 +195,9 @@ var _ = Describe("REST Building API Service", func() {
 
 		Context("Update record with missing parameter id", func() {
 			It("should error", func() {
-				nameReqd := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
+				name := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
-					Name:    &nameReqd,
+					Name:    &name,
 					Address: "Marina Boulevard",
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
@@ -192,11 +208,11 @@ var _ = Describe("REST Building API Service", func() {
 				}
 				Expect(len(pid)).Should(BeNumerically(">", 0))
 				By("Create data before update ok")
-				pidReqd := fmt.Sprintf("%s::invalid", pid)
+				fmtPid := fmt.Sprintf("%s::invalid", pid)
 				uparams := &models.BuildingUpdateParams{
-					ID: &pidReqd,
+					ID: &fmtPid,
 					BuildingCreateParams: models.BuildingCreateParams{
-						Name:    &nameReqd,
+						Name:    &name,
 						Address: "Marina Boulevard",
 						Floors:  tools.Seeder{}.CreateFloors(),
 					},
@@ -210,9 +226,9 @@ var _ = Describe("REST Building API Service", func() {
 
 		Context("Delete record with missing parameter id", func() {
 			It("should error", func() {
-				nameReqd := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
+				name := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
-					Name:    &nameReqd,
+					Name:    &name,
 					Address: "Marina Boulevard-1a",
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
@@ -232,7 +248,7 @@ var _ = Describe("REST Building API Service", func() {
 
 		Context("Get a record not exists", func() {
 			It("should error", func() {
-				uparams := &models.BuildingGetOneParams{ID: "not-exists-id"}
+				uparams := &models.BuildingGetParams{ID: "not-exists-id"}
 				row, err := uparams.Get(ctx, store)
 				Expect(err).To(HaveOccurred())
 				Expect(row).To(BeZero())

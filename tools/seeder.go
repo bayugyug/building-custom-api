@@ -60,3 +60,10 @@ func (s Seeder) CreateFloors() []string {
 	}
 	return floors
 }
+
+// CreateMin geneate dummy building-data and with only name
+func (s Seeder) CreateMin() string {
+	return fmt.Sprintf(`{ "name": "anonymous building %s" }`,
+		fake.DigitsN(15),
+	)
+}

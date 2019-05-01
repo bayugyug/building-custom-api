@@ -2,27 +2,11 @@ package models
 
 import (
 	"context"
-	"errors"
 	"net/http"
 	"strings"
 	"time"
 
 	"github.com/bayugyug/building-custom-api/drivers"
-)
-
-var (
-	// ErrMissingRequiredParameters reqd parameter missing
-	ErrMissingRequiredParameters = errors.New("missing required parameter")
-	// ErrRecordsNotFound list is empty
-	ErrRecordsNotFound = errors.New("record(s) not found")
-	// ErrRecordNotFound data not exiss
-	ErrRecordNotFound = errors.New("record not found")
-	// ErrRecordMismatch generated hashkey by name is a mismatch
-	ErrRecordMismatch = errors.New("record id/name mismatch")
-	// ErrRecordExists data already exiss
-	ErrRecordExists = errors.New("record exists")
-	// ErrDBTransaction internal storage error
-	ErrDBTransaction = errors.New("db storage failed")
 )
 
 // BuildingCreateParams create parameter
