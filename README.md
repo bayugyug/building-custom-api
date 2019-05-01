@@ -74,8 +74,9 @@
 		- port      = port to run the http server (default: 8989)
 
 - Sanity check
-		a. ginkgo ./...	
-		b. make test
+
+	- ginkgo ./...	
+	- make test
 
 - Run from the console
 
