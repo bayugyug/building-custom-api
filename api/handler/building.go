@@ -56,8 +56,8 @@ func (b *Building) Create(w http.ResponseWriter, r *http.Request) {
 	data := models.NewBuildingCreate()
 	//sanity check
 	if err := render.Bind(r, data); err != nil {
-		//206
-		b.ReplyErrContent(w, r, http.StatusPartialContent, http.StatusText(http.StatusPartialContent))
+		//400
+		b.ReplyErrContent(w, r, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 		return
 	}
 	pid, err := data.Create(b.Context, b.Storage)
@@ -68,8 +68,8 @@ func (b *Building) Create(w http.ResponseWriter, r *http.Request) {
 			//409
 			b.ReplyErrContent(w, r, http.StatusConflict, err.Error())
 		case models.ErrMissingRequiredParameters:
-			//206
-			b.ReplyErrContent(w, r, http.StatusPartialContent, err.Error())
+			//400
+			b.ReplyErrContent(w, r, http.StatusBadRequest, err.Error())
 		default:
 			//500
 			b.ReplyErrContent(w, r, http.StatusInternalServerError, err.Error())
@@ -89,8 +89,8 @@ func (b *Building) Update(w http.ResponseWriter, r *http.Request) {
 	data := models.NewBuildingUpdate()
 	//sanity check
 	if err := render.Bind(r, data); err != nil {
-		//206
-		b.ReplyErrContent(w, r, http.StatusPartialContent, http.StatusText(http.StatusPartialContent))
+		//400
+		b.ReplyErrContent(w, r, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 		return
 	}
 	//check
@@ -100,8 +100,8 @@ func (b *Building) Update(w http.ResponseWriter, r *http.Request) {
 			//409
 			b.ReplyErrContent(w, r, http.StatusConflict, err.Error())
 		case models.ErrMissingRequiredParameters:
-			//206
-			b.ReplyErrContent(w, r, http.StatusPartialContent, err.Error())
+			//400
+			b.ReplyErrContent(w, r, http.StatusBadRequest, err.Error())
 		case models.ErrRecordNotFound:
 			//204 or 404?
 			b.ReplyErrContent(w, r, http.StatusNotFound, err.Error())
@@ -141,8 +141,8 @@ func (b *Building) GetOne(w http.ResponseWriter, r *http.Request) {
 	data := models.NewBuildingGetOne(strings.TrimSpace(chi.URLParam(r, "id")))
 	//chk
 	if data.ID == "" {
-		//206
-		b.ReplyErrContent(w, r, http.StatusPartialContent, http.StatusText(http.StatusPartialContent))
+		//400
+		b.ReplyErrContent(w, r, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 		return
 	}
 	//check
@@ -165,8 +165,8 @@ func (b *Building) Delete(w http.ResponseWriter, r *http.Request) {
 	data := models.NewBuildingDelete(strings.TrimSpace(chi.URLParam(r, "id")))
 	//chk
 	if data.ID == "" {
-		//206
-		b.ReplyErrContent(w, r, http.StatusPartialContent, http.StatusText(http.StatusPartialContent))
+		//400
+		b.ReplyErrContent(w, r, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 		return
 	}
 	//chk

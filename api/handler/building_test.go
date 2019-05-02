@@ -190,7 +190,7 @@ var _ = Describe("REST Building API Service::HANDLERS", func() {
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
 				}
-				Expect(w.Code).To(Equal(http.StatusPartialContent))
+				Expect(w.Code).To(Equal(http.StatusBadRequest))
 				By("Create data not done")
 			})
 		})
@@ -226,7 +226,7 @@ var _ = Describe("REST Building API Service::HANDLERS", func() {
 				if err := json.Unmarshal(body, &response); err != nil {
 					Fail(err.Error())
 				}
-				Expect(w.Code).To(Equal(http.StatusPartialContent))
+				Expect(w.Code).To(Equal(http.StatusBadRequest))
 				By("Create data not done")
 			})
 		})
@@ -316,7 +316,7 @@ var _ = Describe("REST Building API Service::HANDLERS", func() {
 				if err := json.Unmarshal(body2, &response2); err != nil {
 					Fail(err.Error())
 				}
-				Expect(w2.Code).To(Equal(http.StatusPartialContent))
+				Expect(w2.Code).To(Equal(http.StatusBadRequest))
 				By("Update data did not continue")
 			})
 		})
