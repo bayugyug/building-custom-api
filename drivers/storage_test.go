@@ -172,7 +172,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 					if gid == "" {
 						Fail("Invalid generated ID")
 					}
-					Expect(len(pid)).Should(BeNumerically(">", 0))
+					Expect(gid).To(Equal(record.ID))
 				}
 
 				By("Create data ok before get all records")
