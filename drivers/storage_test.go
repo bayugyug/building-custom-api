@@ -67,7 +67,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 				record = &models.BuildingData{
 					ID:       pid,
 					Name:     name,
-					Address:  "updated address of the building name",
+					Address:  fmt.Sprintf("updated::address::%s", fake.DigitsN(15)),
 					Floors:   tools.Seeder{}.CreateFloors(),
 					Modified: time.Now().Format(time.RFC3339),
 				}

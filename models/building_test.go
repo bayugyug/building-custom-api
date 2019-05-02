@@ -30,7 +30,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 				name := fmt.Sprintf("building::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
 					Name:    &name,
-					Address: "address of the building name",
+					Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
 				pid, err := params.Create(ctx, store)
@@ -80,7 +80,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 				name := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
 					Name:    &name,
-					Address: "Marina Boulevard-1",
+					Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
 				pid, err := params.Create(ctx, store)
@@ -104,7 +104,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 				name := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
 					Name:    &name,
-					Address: "Marina Boulevard-2",
+					Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
 				pid, err := params.Create(ctx, store)
@@ -131,7 +131,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 					name := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 					params := &models.BuildingCreateParams{
 						Name:    &name,
-						Address: fmt.Sprintf("Marina Boulevard-%05d", i),
+						Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 						Floors:  tools.Seeder{}.CreateFloors(),
 					}
 					pid, err := params.Create(ctx, store)
@@ -184,7 +184,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 		Context("Create record with missing parameter", func() {
 			It("should error", func() {
 				params := &models.BuildingCreateParams{
-					Address: "address of the building name",
+					Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
 				_, err := params.Create(ctx, store)
