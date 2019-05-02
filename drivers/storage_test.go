@@ -39,7 +39,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 				if gid == "" {
 					Fail("Invalid generated ID")
 				}
-				Expect(len(pid)).Should(BeNumerically(">", 0))
+				Expect(gid).To(Equal(record.ID))
 				By("Create data ok")
 			})
 		})
@@ -59,7 +59,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 				if gid == "" {
 					Fail("Invalid generated ID")
 				}
-				Expect(len(pid)).Should(BeNumerically(">", 0))
+				Expect(gid).To(Equal(record.ID))
 				By("Create data before update ok")
 
 				//update old
@@ -104,7 +104,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 				if gid == "" {
 					Fail("Invalid generated ID")
 				}
-				Expect(len(pid)).Should(BeNumerically(">", 0))
+				Expect(gid).To(Equal(record.ID))
 				By("Create data before delete ok")
 
 				//delete old
@@ -122,9 +122,76 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 			})
 		})
 
-	}) // valid
+		Context("Get 1 record", func() {
+			It("should return ok", func() {
+				name := fmt.Sprintf("building::%s", fake.DigitsN(15))
+				pid := building.HashKey(name)
+				record := &models.BuildingData{
+					ID:      pid,
+					Name:    name,
+					Address: "address of the building name",
+					Floors:  []string{"floor-a", "floor-b", "floor-c"},
+					Created: time.Now().Format(time.RFC3339),
+				}
+				gid := store.Set(pid, record)
+				if gid == "" {
+					Fail("Invalid generated ID")
+				}
+				Expect(gid).To(Equal(record.ID))
+				By("Create data ok before get")
 
-	Context("Invalid parameters", func() {
+				//get 1
+				data, err := store.One(pid)
+				if err != nil {
+					Fail(err.Error())
+				}
+				rec, oks := data.(*models.BuildingData)
+				if !oks {
+					Fail("Data conversion failed")
+				}
+				Expect(rec.ID).To(Equal(record.ID))
+				Expect(rec.Name).To(Equal(record.Name))
+				By("Get 1 data ok")
+			})
+		})
 
-	}) // invalid
+		Context("Get list of records", func() {
+			It("should return ok", func() {
+				for i := 1; i <= 10; i++ {
+					name := fmt.Sprintf("building::%s", fake.DigitsN(15))
+					pid := building.HashKey(name)
+					record := &models.BuildingData{
+						ID:      pid,
+						Name:    name,
+						Address: "address of the building name",
+						Floors:  []string{"floor-a", "floor-b", "floor-c"},
+						Created: time.Now().Format(time.RFC3339),
+					}
+					gid := store.Set(pid, record)
+					if gid == "" {
+						Fail("Invalid generated ID")
+					}
+					Expect(len(pid)).Should(BeNumerically(">", 0))
+				}
+
+				By("Create data ok before get all records")
+
+				//get all
+				data, err := store.All()
+				if err != nil || len(data) <= 0 {
+					Fail(err.Error())
+				}
+				var all []*models.BuildingData
+				for _, vv := range data {
+					if row, valid := vv.(*models.BuildingData); valid {
+						all = append(all, row)
+					}
+				}
+
+				Expect(len(all)).To(Equal(10))
+				By("Get all data ok")
+			})
+		})
+
+	})
 })
