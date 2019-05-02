@@ -6,6 +6,7 @@ import (
 
 	"github.com/bayugyug/building-custom-api/drivers"
 	"github.com/bayugyug/building-custom-api/models"
+	"github.com/bayugyug/building-custom-api/tools"
 	"github.com/icrowley/fake"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -32,7 +33,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 					ID:      pid,
 					Name:    name,
 					Address: "address of the building name",
-					Floors:  []string{"floor-a", "floor-b", "floor-c"},
+					Floors:  tools.Seeder{}.CreateFloors(),
 					Created: time.Now().Format(time.RFC3339),
 				}
 				gid := store.Set(pid, record)
@@ -52,7 +53,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 					ID:      pid,
 					Name:    name,
 					Address: "address of the building name",
-					Floors:  []string{"floor-a", "floor-b", "floor-c"},
+					Floors:  tools.Seeder{}.CreateFloors(),
 					Created: time.Now().Format(time.RFC3339),
 				}
 				gid := store.Set(pid, record)
@@ -67,7 +68,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 					ID:       pid,
 					Name:     name,
 					Address:  "updated address of the building name",
-					Floors:   []string{"floor-a", "floor-b", "floor-c"},
+					Floors:   tools.Seeder{}.CreateFloors(),
 					Modified: time.Now().Format(time.RFC3339),
 				}
 				gid = store.Set(pid, record)
@@ -97,7 +98,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 					ID:      pid,
 					Name:    name,
 					Address: "address of the building name",
-					Floors:  []string{"floor-a", "floor-b", "floor-c"},
+					Floors:  tools.Seeder{}.CreateFloors(),
 					Created: time.Now().Format(time.RFC3339),
 				}
 				gid := store.Set(pid, record)
@@ -130,7 +131,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 					ID:      pid,
 					Name:    name,
 					Address: "address of the building name",
-					Floors:  []string{"floor-a", "floor-b", "floor-c"},
+					Floors:  tools.Seeder{}.CreateFloors(),
 					Created: time.Now().Format(time.RFC3339),
 				}
 				gid := store.Set(pid, record)
@@ -164,7 +165,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 						ID:      pid,
 						Name:    name,
 						Address: "address of the building name",
-						Floors:  []string{"floor-a", "floor-b", "floor-c"},
+						Floors:  tools.Seeder{}.CreateFloors(),
 						Created: time.Now().Format(time.RFC3339),
 					}
 					gid := store.Set(pid, record)

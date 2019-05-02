@@ -31,7 +31,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 				params := &models.BuildingCreateParams{
 					Name:    &name,
 					Address: "address of the building name",
-					Floors:  []string{"floor-a", "floor-b", "floor-c"},
+					Floors:  tools.Seeder{}.CreateFloors(),
 				}
 				pid, err := params.Create(ctx, store)
 				if err != nil {
@@ -185,7 +185,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 			It("should error", func() {
 				params := &models.BuildingCreateParams{
 					Address: "address of the building name",
-					Floors:  []string{"floor-a", "floor-b", "floor-c"},
+					Floors:  tools.Seeder{}.CreateFloors(),
 				}
 				_, err := params.Create(ctx, store)
 				Expect(err).To(HaveOccurred())
