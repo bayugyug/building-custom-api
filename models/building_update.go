@@ -29,27 +29,23 @@ func (p *BuildingUpdateParams) Bind(r *http.Request) error {
 	//fmt
 	p.Address = strings.TrimSpace(p.Address)
 	//chk
-	if !p.SanityCheck() {
-		return ErrMissingRequiredParameters
-	}
-	// just a post-process after a decode..
-	return nil
+	return p.SanityCheck()
 }
 
 // SanityCheck filter required parameter
-func (p *BuildingUpdateParams) SanityCheck() bool {
+func (p *BuildingUpdateParams) SanityCheck() error {
 	if p.ID == nil || p.Name == nil ||
 		*p.ID == "" || *p.Name == "" {
-		return false
+		return ErrMissingRequiredParameters
 	}
-	return true
+	return nil
 }
 
 // Update a row from the store
 func (p *BuildingUpdateParams) Update(ctx context.Context, store *drivers.Storage) error {
 	//should not happen :-)
-	if !p.SanityCheck() {
-		return ErrMissingRequiredParameters
+	if err := p.SanityCheck(); err != nil {
+		return err
 	}
 	//db check
 	row, oks := store.Exists(*p.ID)

@@ -14,4 +14,4 @@
 *.xml
 
 #bin
-building-custom-api
+bin/building-custom-api

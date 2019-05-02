@@ -7,10 +7,9 @@ TEST_FILES := $(shell go list ./... | grep -v /vendor/)
 all: build
 
 build :
-	go get -v
-	CGO_ENABLED=0 GOOS=linux go build -o $(BUILD_NAME) -a -tags netgo -installsuffix netgo -installsuffix cgo -v -ldflags "-X main.BuildTime=$(BUILD_TIME) " .
+	CGO_ENABLED=0 GOOS=linux go build -o bin/$(BUILD_NAME) -a -tags netgo -installsuffix netgo -installsuffix cgo -v -ldflags "-X main.BuildTime=$(BUILD_TIME) " .
 
-test : build
+test : 
 	go test -v ./... > testrun.txt
 	golint  $(TEST_FILES) > lint.txt
 	go vet -v $(TEST_FILES) > vet.txt
@@ -27,7 +26,7 @@ testrun : clean test
 prepare : build
 
 clean:
-	rm -f $(BUILD_NAME)
+	rm -f $(BUILD_NAME) bin/$(BUILD_NAME)
 	rm -f benchmarks.xml coverage.xml vet.txt lint.txt testrun.txt gink.txt
 
 re: clean all

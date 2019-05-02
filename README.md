@@ -64,7 +64,7 @@ curl -X DELETE    'http://127.0.0.1:8989/v1/api/building/bb752d3573ca1679be6832f
 
 ```sh
 
-./building-custom-api --config '{"port":"8989"}'
+./bin/building-custom-api --config '{"port":"8989"}'
 
 ```
 

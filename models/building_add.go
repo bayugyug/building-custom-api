@@ -29,26 +29,22 @@ func (p *BuildingCreateParams) Bind(r *http.Request) error {
 	}
 	p.Address = strings.TrimSpace(p.Address)
 	//check
-	if !p.SanityCheck() {
-		return ErrMissingRequiredParameters
-	}
-	// just a post-process after a decode..
-	return nil
+	return p.SanityCheck()
 }
 
 // SanityCheck filter required parameter
-func (p *BuildingCreateParams) SanityCheck() bool {
+func (p *BuildingCreateParams) SanityCheck() error {
 	if p.Name == nil || *p.Name == "" {
-		return false
+		return ErrMissingRequiredParameters
 	}
-	return true
+	return nil
 }
 
 // Create add a row from the store
 func (p *BuildingCreateParams) Create(ctx context.Context, store *drivers.Storage) (string, error) {
 	//should not happen
-	if !p.SanityCheck() {
-		return "", ErrMissingRequiredParameters
+	if err := p.SanityCheck(); err != nil {
+		return "", err
 	}
 	record := NewBuildingData()
 	pid := record.HashKey(*p.Name)
