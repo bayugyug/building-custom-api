@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/bayugyug/building-custom-api/api/handler"
-	"github.com/bayugyug/building-custom-api/configs"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -22,7 +21,6 @@ import (
 const (
 	svcOptionWithHandler = "svc-opts-handler"
 	svcOptionWithAddress = "svc-opts-address"
-	svcOptionWithStore   = "svc-opts-store"
 )
 
 // APIService the svc map
@@ -32,23 +30,32 @@ type APIService struct {
 	Address  string
 }
 
+// Setup options settings
+type Setup func(*APIService)
+
+// WithSvcOptMux opts for mux
+func WithSvcOptMux(m *chi.Mux) Setup {
+	return func(args *APIService) {
+		args.Mux = m
+	}
+}
+
 // WithSvcOptHandler opts for handler
-func WithSvcOptHandler(r *handler.Building) *configs.Option {
-	return configs.NewOption(svcOptionWithHandler, r)
+func WithSvcOptHandler(r *handler.Building) Setup {
+	return func(args *APIService) {
+		args.Building = r
+	}
 }
 
 // WithSvcOptAddress opts for port#
-func WithSvcOptAddress(r string) *configs.Option {
-	return configs.NewOption(svcOptionWithAddress, r)
-}
-
-// WithSvcOptRedisHost opts for db connector
-func WithSvcOptRedisHost(r string) *configs.Option {
-	return configs.NewOption(svcOptionWithStore, r)
+func WithSvcOptAddress(r string) Setup {
+	return func(args *APIService) {
+		args.Address = r
+	}
 }
 
 // NewAPIService service new instance
-func NewAPIService(opts ...*configs.Option) (*APIService, error) {
+func NewAPIService(opts ...Setup) (*APIService, error) {
 
 	//default
 	svc := &APIService{
@@ -57,15 +64,9 @@ func NewAPIService(opts ...*configs.Option) (*APIService, error) {
 	}
 
 	//add options if any
-	for _, o := range opts {
-		//chk opt-name
-		switch o.Name() {
-		case svcOptionWithAddress:
-			if s, oks := o.Value().(string); oks && s != "" {
-				svc.Address = s
-			}
-		}
-	} //iterate all opts
+	for _, setter := range opts {
+		setter(svc)
+	}
 
 	//set the actual router
 	svc.Mux = svc.MapRoute()
@@ -131,7 +132,7 @@ func (svc *APIService) MapRoute() *chi.Mux {
 	// Basic CORS
 	cors := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		AllowCredentials: true,
 	})
