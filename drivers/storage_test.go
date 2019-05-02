@@ -16,11 +16,11 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 
 	//init
 	var store *drivers.Storage
-	var building *models.BuildingData
+	var building models.BuildingData
 
 	BeforeEach(func() {
 		store = drivers.NewStorage()
-		building = models.NewBuildingData()
+		building = models.BuildingData{}
 	})
 
 	Context("Storage sanity checking", func() {
@@ -32,7 +32,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 				record := &models.BuildingData{
 					ID:      pid,
 					Name:    name,
-					Address: "address of the building name",
+					Address: fmt.Sprintf("address::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 					Created: time.Now().Format(time.RFC3339),
 				}
@@ -52,7 +52,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 				record := &models.BuildingData{
 					ID:      pid,
 					Name:    name,
-					Address: "address of the building name",
+					Address: fmt.Sprintf("address::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 					Created: time.Now().Format(time.RFC3339),
 				}
@@ -97,7 +97,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 				record := &models.BuildingData{
 					ID:      pid,
 					Name:    name,
-					Address: "address of the building name",
+					Address: fmt.Sprintf("address::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 					Created: time.Now().Format(time.RFC3339),
 				}
@@ -130,7 +130,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 				record := &models.BuildingData{
 					ID:      pid,
 					Name:    name,
-					Address: "address of the building name",
+					Address: fmt.Sprintf("address::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 					Created: time.Now().Format(time.RFC3339),
 				}
@@ -164,7 +164,7 @@ var _ = Describe("REST Building API Service::STORAGE", func() {
 					record := &models.BuildingData{
 						ID:      pid,
 						Name:    name,
-						Address: "address of the building name",
+						Address: fmt.Sprintf("address::%s", fake.DigitsN(15)),
 						Floors:  tools.Seeder{}.CreateFloors(),
 						Created: time.Now().Format(time.RFC3339),
 					}
