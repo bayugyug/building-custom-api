@@ -48,7 +48,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 				name := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
 					Name:    &name,
-					Address: "Marina Boulevard",
+					Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
 				pid, err := params.Create(ctx, store)
@@ -62,7 +62,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 					ID: &pid,
 					BuildingCreateParams: models.BuildingCreateParams{
 						Name:    &name,
-						Address: "Marina Boulevard",
+						Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 						Floors:  tools.Seeder{}.CreateFloors(),
 					},
 				}
@@ -198,7 +198,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 				name := fmt.Sprintf("marina-bay-sands::%s", fake.DigitsN(15))
 				params := &models.BuildingCreateParams{
 					Name:    &name,
-					Address: "Marina Boulevard",
+					Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
 
@@ -213,7 +213,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 					ID: &fmtPid,
 					BuildingCreateParams: models.BuildingCreateParams{
 						Name:    &name,
-						Address: "Marina Boulevard",
+						Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 						Floors:  tools.Seeder{}.CreateFloors(),
 					},
 				}
