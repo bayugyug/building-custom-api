@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 	"strings"
 	"time"
@@ -31,7 +30,6 @@ type Response struct {
 
 // Building the api handler
 type Building struct {
-	Context context.Context
 	Storage *drivers.Storage
 }
 
@@ -39,7 +37,6 @@ type Building struct {
 func NewBuilding() *Building {
 	return &Building{
 		Storage: drivers.NewStorage(),
-		Context: context.Background(),
 	}
 }
 
