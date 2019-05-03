@@ -1,7 +1,6 @@
 package models
 
 import (
-	"context"
 	"net/http"
 	"strings"
 	"time"
@@ -41,7 +40,7 @@ func (p *BuildingCreateParams) SanityCheck() error {
 }
 
 // Create add a row from the store
-func (p *BuildingCreateParams) Create(ctx context.Context, store *drivers.Storage) (string, error) {
+func (p *BuildingCreateParams) Create(store *drivers.Storage) (string, error) {
 	//should not happen
 	if err := p.SanityCheck(); err != nil {
 		return "", err

@@ -1,8 +1,6 @@
 package models
 
 import (
-	"context"
-
 	"github.com/bayugyug/building-custom-api/drivers"
 )
 
@@ -17,7 +15,7 @@ func NewBuildingDelete(pid string) *BuildingDeleteParams {
 }
 
 // Delete remove a row from the store base on id
-func (p *BuildingDeleteParams) Delete(ctx context.Context, store *drivers.Storage) error {
+func (p *BuildingDeleteParams) Delete(store *drivers.Storage) error {
 	if _, oks := store.Exists(p.ID); !oks {
 		return ErrRecordNotFound
 	}

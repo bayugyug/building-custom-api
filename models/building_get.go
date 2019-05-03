@@ -1,8 +1,6 @@
 package models
 
 import (
-	"context"
-
 	"github.com/bayugyug/building-custom-api/drivers"
 )
 
@@ -17,7 +15,7 @@ func NewBuildingGetOne(id string) *BuildingGetParams {
 }
 
 // Get query from the store base on id
-func (p *BuildingGetParams) Get(ctx context.Context, store *drivers.Storage) (*BuildingData, error) {
+func (p *BuildingGetParams) Get(store *drivers.Storage) (*BuildingData, error) {
 	data, err := store.One(p.ID)
 	if err != nil {
 		return nil, err
@@ -32,7 +30,7 @@ func (p *BuildingGetParams) Get(ctx context.Context, store *drivers.Storage) (*B
 }
 
 // GetAll query from the store base on id
-func (p *BuildingGetParams) GetAll(ctx context.Context, store *drivers.Storage) ([]*BuildingData, error) {
+func (p *BuildingGetParams) GetAll(store *drivers.Storage) ([]*BuildingData, error) {
 	data, err := store.All()
 	if err != nil {
 		return nil, err

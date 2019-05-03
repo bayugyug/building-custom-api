@@ -1,7 +1,6 @@
 package models_test
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/bayugyug/building-custom-api/drivers"
@@ -15,11 +14,9 @@ import (
 var _ = Describe("REST Building API Service::MODELS", func() {
 
 	//init
-	var ctx context.Context
 	var store *drivers.Storage
 
 	BeforeEach(func() {
-		ctx = context.Background()
 		store = drivers.NewStorage()
 	})
 
@@ -33,7 +30,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 					Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
-				pid, err := params.Create(ctx, store)
+				pid, err := params.Create(store)
 				if err != nil {
 					Fail(err.Error())
 				}
@@ -51,7 +48,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 					Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
-				pid, err := params.Create(ctx, store)
+				pid, err := params.Create(store)
 				if err != nil {
 					Fail(err.Error())
 				}
@@ -67,7 +64,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 					},
 				}
 
-				err = uparams.Update(ctx, store)
+				err = uparams.Update(store)
 				if err != nil {
 					Fail(err.Error())
 				}
@@ -83,7 +80,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 					Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
-				pid, err := params.Create(ctx, store)
+				pid, err := params.Create(store)
 				if err != nil {
 					Fail(err.Error())
 				}
@@ -91,7 +88,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 				By("Create data before delete ok")
 
 				uparams := models.NewBuildingDelete(pid)
-				err = uparams.Delete(ctx, store)
+				err = uparams.Delete(store)
 				if err != nil {
 					Fail(err.Error())
 				}
@@ -107,7 +104,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 					Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
-				pid, err := params.Create(ctx, store)
+				pid, err := params.Create(store)
 				if err != nil {
 					Fail(err.Error())
 				}
@@ -115,7 +112,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 				By("Create data before get 1 row ok")
 
 				uparams := models.NewBuildingGetOne(pid)
-				row, err := uparams.Get(ctx, store)
+				row, err := uparams.Get(store)
 				if err != nil {
 					Fail(err.Error())
 				}
@@ -134,7 +131,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 						Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 						Floors:  tools.Seeder{}.CreateFloors(),
 					}
-					pid, err := params.Create(ctx, store)
+					pid, err := params.Create(store)
 					if err != nil {
 						Fail(err.Error())
 					}
@@ -142,7 +139,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 					By("Create data before get list ok")
 				}
 				uparams := &models.BuildingGetParams{}
-				rows, err := uparams.GetAll(ctx, store)
+				rows, err := uparams.GetAll(store)
 				if err != nil {
 					Fail(err.Error())
 				}
@@ -157,7 +154,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 				params := &models.BuildingCreateParams{
 					Name: &name,
 				}
-				pid, err := params.Create(ctx, store)
+				pid, err := params.Create(store)
 				if err != nil {
 					Fail(err.Error())
 				}
@@ -174,7 +171,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 		Context("Get list of records with empty list", func() {
 			It("should error", func() {
 				uparams := &models.BuildingGetParams{}
-				rows, err := uparams.GetAll(ctx, store)
+				rows, err := uparams.GetAll(store)
 				Expect(err).To(HaveOccurred())
 				Expect(len(rows)).To(Equal(0))
 				By("Get more data empty as expected")
@@ -187,7 +184,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 					Address: fmt.Sprintf("Marina Boulevard::%s", fake.DigitsN(15)),
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
-				_, err := params.Create(ctx, store)
+				_, err := params.Create(store)
 				Expect(err).To(HaveOccurred())
 				By("Create data empty as expected")
 			})
@@ -202,7 +199,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
 
-				pid, err := params.Create(ctx, store)
+				pid, err := params.Create(store)
 				if err != nil {
 					Fail(err.Error())
 				}
@@ -218,7 +215,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 					},
 				}
 
-				err = uparams.Update(ctx, store)
+				err = uparams.Update(store)
 				Expect(err).To(HaveOccurred())
 				By("Update data empty as expected")
 			})
@@ -232,7 +229,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 					Address: "Marina Boulevard-1a",
 					Floors:  tools.Seeder{}.CreateFloors(),
 				}
-				pid, err := params.Create(ctx, store)
+				pid, err := params.Create(store)
 				if err != nil {
 					Fail(err.Error())
 				}
@@ -240,7 +237,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 				By("Create data before delete ok")
 
 				uparams := models.NewBuildingDelete(pid + "no-id")
-				err = uparams.Delete(ctx, store)
+				err = uparams.Delete(store)
 				Expect(err).To(HaveOccurred())
 				By("Delete data empty as expected")
 			})
@@ -249,7 +246,7 @@ var _ = Describe("REST Building API Service::MODELS", func() {
 		Context("Get a record not exists", func() {
 			It("should error", func() {
 				uparams := &models.BuildingGetParams{ID: "not-exists-id"}
-				row, err := uparams.Get(ctx, store)
+				row, err := uparams.Get(store)
 				Expect(err).To(HaveOccurred())
 				Expect(row).To(BeZero())
 				By("Get data empty as expected")

@@ -1,7 +1,6 @@
 package models
 
 import (
-	"context"
 	"net/http"
 	"strings"
 	"time"
@@ -42,7 +41,7 @@ func (p *BuildingUpdateParams) SanityCheck() error {
 }
 
 // Update a row from the store
-func (p *BuildingUpdateParams) Update(ctx context.Context, store *drivers.Storage) error {
+func (p *BuildingUpdateParams) Update(store *drivers.Storage) error {
 	//should not happen :-)
 	if err := p.SanityCheck(); err != nil {
 		return err
