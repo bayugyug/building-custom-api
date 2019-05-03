@@ -60,7 +60,7 @@ func (b *Building) Create(w http.ResponseWriter, r *http.Request) {
 		b.ReplyErrContent(w, r, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 		return
 	}
-	pid, err := data.Create(b.Context, b.Storage)
+	pid, err := data.Create(r.Context(), b.Storage)
 	//chk
 	if err != nil {
 		switch err {
@@ -94,7 +94,7 @@ func (b *Building) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//check
-	if err := data.Update(b.Context, b.Storage); err != nil {
+	if err := data.Update(r.Context(), b.Storage); err != nil {
 		switch err {
 		case models.ErrRecordMismatch:
 			//409
@@ -121,7 +121,7 @@ func (b *Building) Update(w http.ResponseWriter, r *http.Request) {
 func (b *Building) GetAll(w http.ResponseWriter, r *http.Request) {
 	data := &models.BuildingGetParams{}
 	//check
-	rows, err := data.GetAll(b.Context, b.Storage)
+	rows, err := data.GetAll(r.Context(), b.Storage)
 	//chk
 	if err != nil {
 		//404
@@ -146,7 +146,7 @@ func (b *Building) GetOne(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//check
-	row, err := data.Get(b.Context, b.Storage)
+	row, err := data.Get(r.Context(), b.Storage)
 	//chk
 	if err != nil {
 		//404
@@ -170,7 +170,7 @@ func (b *Building) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//chk
-	if err := data.Delete(b.Context, b.Storage); err != nil {
+	if err := data.Delete(r.Context(), b.Storage); err != nil {
 		switch err {
 		case models.ErrRecordNotFound:
 			//404
