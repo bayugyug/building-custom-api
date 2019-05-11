@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/bayugyug/building-custom-api/configs"
 	"github.com/bayugyug/building-custom-api/drivers"
 	"github.com/bayugyug/building-custom-api/models"
 
@@ -194,8 +195,18 @@ func (b *Building) ReplyErrContent(w http.ResponseWriter, r *http.Request, code 
 
 // HealthCheck index page
 func (b *Building) HealthCheck(w http.ResponseWriter, r *http.Request) {
-	//good
-	render.JSON(w, r, Response{
-		Status: "Building API Service: " + time.Now().Format(time.RFC3339),
-	})
+	info := struct {
+		Application string `json:"application"`
+		BuildTime   string `json:"buildTime"`
+		Commit      string `json:"commit"`
+		Release     string `json:"release"`
+		Now         string `json:"now"`
+	}{
+		configs.Application,
+		configs.BuildTime,
+		configs.Commit,
+		configs.Release,
+		time.Now().Format(time.RFC3339),
+	}
+	render.JSON(w, r, info)
 }

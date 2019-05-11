@@ -1,0 +1,36 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: building-custom-api
+  labels: {app: building-custom-api}
+spec:
+  replicas: 1
+  template:
+    metadata: {labels: {app: building-custom-api}}
+    spec:
+      containers:
+      - name: building-custom-api
+        image: bayugyug/building-custom-api:alpine
+        command:
+        ports:
+          - containerPort: 8989
+        volumeMounts:
+          - name: api-config
+            mountPath: /etc/api/
+            readOnly: true
+      volumes:
+        - name: api-config
+          configMap: { name: api-config }
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: building-custom-api
+spec:
+  type: LoadBalancer
+  selector:
+    app: building-custom-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8989

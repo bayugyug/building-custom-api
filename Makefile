@@ -1,15 +1,21 @@
 BUILD_DATE := $(shell date +%Y-%m-%dT%H:%M:%S%z)
 BUILD_TIME := $(shell date +%Y%m%d.%H%M%S)
 BUILD_HASH := $(shell git log -1 2>/dev/null| head -n 1 | cut -d ' ' -f 2)
-BUILD_NAME := building-custom-api
 TEST_FILES := $(shell go list ./... | grep -v /vendor/)
+BUILD_COMMIT?=$(shell git rev-parse --short HEAD)
+BUILD_NAME := building-custom-api
+BUILD_RELEASE?=0.0.1
+PROJECT?=github.com/bayugyug/$(BUILD_NAME)
 
 all: build
 
-build :
-	CGO_ENABLED=0 GOOS=linux go build -o bin/$(BUILD_NAME) -a -tags netgo -installsuffix netgo -installsuffix cgo -v -ldflags "-X main.BuildTime=$(BUILD_TIME) " .
+build : clean
+	CGO_ENABLED=0 GOOS=linux go build -o bin/$(BUILD_NAME) -a -tags netgo -installsuffix netgo -installsuffix cgo -v -ldflags " \
+	-X ${PROJECT}/configs.BuildTime=$(BUILD_TIME)  \
+	-X ${PROJECT}/configs.Release=$(BUILD_RELEASE) \
+	-X ${PROJECT}/configs.Commit=$(BUILD_COMMIT) " .
 
-test : 
+test : clean
 	go test -v ./... > testrun.txt
 	golint  $(TEST_FILES) > lint.txt
 	go vet -v $(TEST_FILES) > vet.txt
@@ -24,6 +30,12 @@ testrun : clean test
 	time go test -v -bench=. -benchmem -dummy > testrun.txt 2>&1
 
 prepare : build
+
+pack-alpine: clean build
+	cd deployments && sudo docker build --no-cache --rm -t bayugyug/building-custom-api:alpine  -f  Dockerfile.alpine .
+
+pack-scratch: clean build
+	cp bin/$(BUILD_NAME) deployments/ && cd deployments && sudo docker build --no-cache --rm -t bayugyug/building-custom-api:scratch  -f  Dockerfile.scratch .
 
 clean:
 	rm -f $(BUILD_NAME) bin/$(BUILD_NAME)
